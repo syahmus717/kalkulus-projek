@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HydroLogic | Kelompok 3 Kalkulus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f8fafc; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* SPA Logic */
+        .page-wrapper { display: none; }
+        .active-page { display: block; animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glassmorphism */
+        .glass-dark { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-light { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        
+        /* Nav Styling */
+        .nav-link { position: relative; color: #cbd5e1; transition: color 0.3s ease; }
+        .nav-link:hover { color: #fff; }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background: linear-gradient(90deg, #11caa0, #0ea5e9); transition: width 0.3s ease; }
+        .nav-link.active { color: #fff; }
+        .nav-link.active::after { width: 100%; }
+
+        .nav-link-mobile { color: #cbd5e1; transition: color 0.3s ease; border-left: 3px solid transparent; }
+        .nav-link-mobile.active { color: #11caa0; border-left-color: #11caa0; background: rgba(17, 202, 160, 0.05); }
+
+        /* Toast */
+        #toast { visibility: hidden; min-width: 250px; background-color: #0f172a; color: #fff; border-radius: 12px; padding: 12px 16px; position: fixed; z-index: 1000; left: 50%; bottom: 20px; transform: translateX(-50%); opacity: 0; transition: opacity 0.4s, bottom 0.4s; border: 1px solid rgba(17, 202, 160, 0.3); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 12px; width: 90%; max-width: 350px; }
+        #toast.show { visibility: visible; opacity: 1; bottom: 30px; }
+        
+        /* Error Animation Shake */
+        .input-error { border-color: #ef4444 !important; animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased overflow-x-hidden">
+
+    <nav class="fixed top-0 w-full z-[100] glass-dark shadow-sm">
+        <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3 md:py-4">
+                
+                <div class="flex items-center gap-3 cursor-pointer group" onclick="showPage('beranda')">
+                    <div class="bg-gradient-to-br from-[#11caa0] to-[#0ea5e9] p-2 rounded-xl shadow-lg shadow-[#11caa0]/20 group-hover:shadow-[#11caa0]/40 transition duration-300">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <span class="text-xl font-extrabold tracking-tighter text-white">HYDRO<span class="text-transparent bg-clip-text bg-gradient-to-r from-[#11caa0] to-[#0ea5e9]">LOGIC</span></span>
+                </div>
+                
+                <div class="hidden md:flex gap-8 text-sm font-bold uppercase tracking-widest">
+                    <button onclick="showPage('beranda')" id="nav-beranda" class="nav-link active">Beranda</button>
+                    <button onclick="showPage('perhitungan')" id="nav-perhitungan" class="nav-link">Perhitungan</button>
+                    <button onclick="showPage('tentang')" id="nav-tentang" class="nav-link">Tim Pengembang</button>
+                </div>
+
+                <button onclick="toggleMobileMenu()" class="text-2xl text-white focus:outline-none md:hidden inline cursor-pointer p-2 transition-transform">
+                    <i id="menu-icon" class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+
+            <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-[#0f172a] border-b border-white/10 flex-col py-3 px-4 shadow-2xl z-50 md:hidden transition-all duration-300">
+                <button onclick="showPage('beranda'); toggleMobileMenu()" id="nav-mobile-beranda" class="nav-link-mobile active py-3.5 px-4 text-left font-bold uppercase text-sm tracking-widest rounded-r-lg mb-1">Beranda</button>
+                <button onclick="showPage('perhitungan'); toggleMobileMenu()" id="nav-mobile-perhitungan" class="nav-link-mobile py-3.5 px-4 text-left font-bold uppercase text-sm tracking-widest rounded-r-lg mb-1">Perhitungan</button>
+                <button onclick="showPage('tentang'); toggleMobileMenu()" id="nav-mobile-tentang" class="nav-link-mobile py-3.5 px-4 text-left font-bold uppercase text-sm tracking-widest rounded-r-lg">Tim Pengembang</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-[64px] md:pt-[76px]">
+
+        <section id="page-beranda" class="page-wrapper active-page">
+            <div class="relative min-h-[calc(100vh-64px)] md:min-h-[calc(100vh-76px)] flex items-center bg-[#0f172a] text-white overflow-hidden py-10 md:py-12">
+                <div class="absolute top-0 -left-10 w-64 md:w-96 h-64 md:h-96 bg-[#11caa0] rounded-full mix-blend-multiply filter blur-[100px] md:blur-[150px] opacity-30 md:opacity-20 pointer-events-none"></div>
+                <div class="absolute bottom-0 -right-10 w-64 md:w-96 h-64 md:h-96 bg-[#0ea5e9] rounded-full mix-blend-multiply filter blur-[100px] md:blur-[150px] opacity-30 md:opacity-20 pointer-events-none"></div>
+
+                <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center w-full relative z-10 py-6">
+                    
+                    <div class="text-center lg:text-left">
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[#11caa0] text-xs font-bold uppercase tracking-widest mb-6 mx-auto lg:mx-0">
+                            <span class="w-2 h-2 rounded-full bg-[#11caa0] animate-pulse"></span> Kalkulus Terapan
+                        </div>
+                        <h1 class="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.2] md:leading-[1.1] mb-6 tracking-tight">
+                            Presisi Irigasi dengan <br class="hidden md:block">
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#11caa0] via-[#0ea5e9] to-[#3b82f6]">Integral Tentu.</span>
+                        </h1>
+                        <p class="text-slate-400 text-sm md:text-base lg:text-lg mb-8 md:mb-10 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                            Ubah data fluktuatif menjadi insight presisi. HydroLogic menggunakan <b>Aturan Trapesium</b> untuk mengkalkulasi akumulasi volume air secara real-time demi efisiensi pertanian.
+                        </p>
+
+                        <button onclick="showPage('perhitungan')" class="w-full sm:w-auto group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-[#11caa0] to-[#0ea5e9] rounded-xl shadow-[0_0_20px_rgba(17,202,160,0.3)] hover:shadow-[0_0_40px_rgba(17,202,160,0.5)] md:hover:-translate-y-1">
+                            <span class="tracking-widest uppercase text-sm">Mulai Perhitungan</span>
+                            <svg class="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="relative lg:ml-auto w-full mt-6 lg:mt-0">
+                        <div class="bg-[rgba(15,23,42,0.6)] backdrop-blur-xl p-8 md:p-10 rounded-[2rem] shadow-2xl relative z-10 border border-white/10 w-full max-w-md mx-auto">
+                            <div class="flex justify-between items-center mb-6 md:mb-8">
+                                <h3 class="text-slate-300 font-bold text-xs tracking-widest uppercase">Formula Engine</h3>
+                                <div class="flex gap-2">
+                                    <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                                    <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                                    <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                                </div>
+                            </div>
+                            <div class="bg-[#0b1120] p-6 md:p-8 rounded-2xl mb-6 shadow-inner border border-white/5 text-center relative overflow-hidden group">
+                                <div class="absolute inset-0 bg-gradient-to-r from-[#11caa0]/10 to-[#0ea5e9]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                <p class="text-3xl md:text-4xl font-mono italic text-transparent bg-clip-text bg-gradient-to-r from-[#11caa0] to-[#0ea5e9] font-bold tracking-widest">
+                                    V = ∫<sub class="text-slate-500 text-lg">a</sub><sup class="text-slate-500 text-lg">b</sup> f(t) dt
+                                </p>
+                            </div>
+                            <p class="text-xs md:text-sm text-slate-400 leading-relaxed text-center font-medium">
+                                "Menjumlahkan irisan trapesium terkecil dari waktu (t) dan laju debit f(t) untuk mendapatkan total volume yang presisi."
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="page-perhitungan" class="page-wrapper">
+            <div class="min-h-screen py-8 md:py-12 bg-[#f8fafc]">
+                <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+                    
+                    <div class="mb-6 md:mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-5">
+                        <div>
+                            <h2 class="text-3xl md:text-3xl lg:text-4xl font-black text-slate-800 tracking-tight">Kalkulator<span class="text-transparent bg-clip-text bg-gradient-to-r from-[#11caa0] to-[#0ea5e9]">.</span></h2>
+                            <p class="text-slate-500 font-medium mt-1 md:mt-2 text-sm">Visualisasi real-time & analitik irigasi lahan.</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 md:flex gap-3 w-full md:w-auto">
+                            <button onclick="resetData()" class="justify-center px-4 py-3 md:py-2.5 rounded-xl text-xs font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 hover:text-red-500 transition shadow-sm flex items-center gap-2">
+                                <i class="fa-solid fa-rotate-right"></i> Reset
+                            </button>
+                            <button onclick="downloadExcel()" class="justify-center bg-slate-900 text-white px-4 py-3 md:py-2.5 rounded-xl text-xs font-bold hover:bg-slate-800 transition shadow-md flex items-center gap-2 md:hover:-translate-y-0.5">
+                                <i class="fa-solid fa-file-csv text-[#11caa0] text-base"></i> Export
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="">
+                        
+                        <div class="xl:col-span-4 space-y-6">
+                            
+                            <div class="glass-light p-5 md:p-6 rounded-[24px] shadow-sm">
+                                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 md:mb-5 flex items-center gap-2">
+                                    <i class="fa-solid fa-leaf text-[#11caa0]"></i> Parameter Lahan
+                                </h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-500 mb-2 uppercase">Jenis Tanaman</label>
+                                        <select id="selectTanaman" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#11caa0] outline-none font-bold text-sm text-slate-700 cursor-pointer transition">
+                                            <option value="10">Padi (10 L/m²)</option>
+                                            <option value="5">Tomat (5 L/m²)</option>
+                                            <option value="7" selected>Jagung (7 L/m²)</option>
+                                            <option value="6">Cabai (6 L/m²)</option>
+                                            <option value="custom">Kustom (Manual)</option>
+                                        </select>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-500 mb-2 uppercase">Luas (m²)</label>
+                                            <input type="number" id="inputLuas" value="1000" min="0" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#11caa0] outline-none font-bold text-sm text-slate-700 transition">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-500 mb-2 uppercase">Kebutuhan</label>
+                                            <input type="number" id="inputKebutuhan" value="10" min="0" readonly class="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none font-bold text-sm bg-slate-50 text-slate-500 shadow-inner">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <form id="formDebit" class="bg-gradient-to-br from-[#0f172a] to-[#1e293b] p-5 md:p-6 rounded-[24px] shadow-xl text-white relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-32 h-32 bg-[#11caa0] rounded-full mix-blend-overlay filter blur-2xl opacity-20"></div>
+                                <h3 class="text-xs font-bold text-[#11caa0] uppercase tracking-widest mb-5 relative z-10 flex items-center gap-2">
+                                    <i class="fa-solid fa-stopwatch"></i> Entri Sensor Laju
+                                </h3>
+                                <div class="grid grid-cols-2 gap-4 mb-6 relative z-10">
+                                    <div>
+                                        <label class="block text-xs text-slate-400 font-bold mb-2 uppercase">Waktu (Mnt)</label>
+                                        <input type="number" id="inputWaktu" min="0" class="w-full px-4 py-3 bg-[#0f172a]/50 border border-slate-600 rounded-xl outline-none font-mono text-base focus:border-[#11caa0] transition-colors" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs text-slate-400 font-bold mb-2 uppercase">Debit (L/m)</label>
+                                        <input type="number" id="inputDebit" min="0" class="w-full px-4 py-3 bg-[#0f172a]/50 border border-slate-600 rounded-xl outline-none font-mono text-base focus:border-[#11caa0] transition-colors" placeholder="0" required>
+                                    </div>
+                                </div>
+                                <button type="submit" class="w-full py-4 bg-gradient-to-r from-[#11caa0] to-[#0ea5e9] text-white font-black rounded-xl hover:shadow-[0_0_15px_rgba(17,202,160,0.4)] transition-all uppercase tracking-widest text-xs relative z-10 md:hover:-translate-y-0.5">Simpan & Kalkulasi</button>
+                            </form>
+                        </div>
+
+                        <div class="xl:col-span-8 space-y-6">
+                            
+                            <div class="grid grid-cols-2 gap-4 md:gap-6">
+                                <div class="glass-light p-5 md:p-6 rounded-[24px] shadow-sm">
+                                    <span class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest block mb-2">Terakumulasi</span>
+                                    <h2 class="text-2xl md:text-4xl font-black text-slate-800 font-mono tracking-tight break-words"><span id="cardVolume">0</span> <span class="text-base md:text-xl text-slate-400 font-sans">L</span></h2>
+                                </div>
+                                <div class="glass-light p-5 md:p-6 rounded-[24px] shadow-sm">
+                                    <span class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest block mb-2">Pencapaian Target</span>
+                                    <h2 id="cardPercent" class="text-2xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#11caa0] to-[#0ea5e9] font-mono tracking-tight">0%</h2>
+                                    <div class="w-full bg-slate-100 h-1.5 rounded-full mt-3 md:mt-4 overflow-hidden">
+                                        <div id="progressBar" class="h-full bg-gradient-to-r from-[#11caa0] to-[#0ea5e9] transition-all duration-1000 ease-out" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="glass-light p-5 md:p-8 rounded-[24px] shadow-sm h-[280px] sm:h-[350px] md:h-[420px] relative w-full">
+                                <div class="absolute top-4 md:top-6 right-4 md:right-8 flex items-center gap-2 z-10 bg-white/80 md:bg-transparent px-2.5 py-1 md:p-0 rounded-full">
+                                    <span class="w-2 h-2 rounded-full bg-[#11caa0] animate-pulse"></span>
+                                    <span class="text-[10px] font-bold text-slate-500 md:text-slate-400 uppercase tracking-widest">Live Area</span>
+                                </div>
+                                <canvas id="flowChart"></canvas>
+                            </div>
+
+                            <div class="glass-light p-5 md:p-6 rounded-[24px] shadow-sm relative w-full overflow-hidden">
+                                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-table text-[#11caa0]"></i> Validasi Langkah
+                                </h3>
+                                <div class="overflow-x-auto max-h-60 rounded-xl border border-slate-100 w-full">
+                                    <table class="w-full text-left border-collapse whitespace-nowrap min-w-[500px]">
+                                        <thead class="sticky top-0 bg-white shadow-sm z-10">
+                                            <tr class="text-[10px] md:text-xs uppercase tracking-wider text-slate-500 bg-slate-50">
+                                                <th class="p-4 font-bold rounded-tl-xl">Irisan (i)</th>
+                                                <th class="p-4 font-bold">Waktu (a&rightarrow;b)</th>
+                                                <th class="p-4 font-bold text-blue-600">&Delta;t (mnt)</th>
+                                                <th class="p-4 font-bold">Debit (f(a)&rightarrow;f(b))</th>
+                                                <th class="p-4 font-bold text-orange-500">Rata-rata</th>
+                                                <th class="p-4 font-bold text-right text-[#11caa0] rounded-tr-xl">Vol (L)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableBody" class="text-xs md:text-sm font-mono text-slate-700 divide-y divide-slate-100 bg-white">
+                                            </tbody>
+                                    </table>
+                                    <div id="emptyTableMsg" class="text-center p-8 md:p-10 text-slate-400 text-xs font-bold uppercase tracking-widest bg-white">
+                                        <i class="fa-solid fa-chart-area block text-3xl mb-3 opacity-50"></i>
+                                        Belum ada data kalkulus.
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-tentang" class="page-wrapper">
+            <div class="min-h-screen py-16 md:py-20 bg-slate-50 relative overflow-hidden">
+                <div class="max-w-6xl mx-auto px-5 sm:px-6 text-center relative z-10">
+                    
+                    <div class="mb-12 md:mb-16">
+                        <span class="inline-block py-1.5 px-4 rounded-full bg-slate-200 text-slate-600 text-xs font-bold tracking-widest uppercase mb-4">Informatika UNSIL 2025</span>
+                        <h2 class="text-4xl md:text-5xl font-black text-slate-800 tracking-tight">Tim <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#11caa0] to-[#0ea5e9]">Kelompok 3.</span></h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-8">
+                        <div class="glass-light p-6 md:p-8 rounded-[24px] md:rounded-[32px] shadow-sm hover:shadow-lg transform md:hover:-translate-y-2 transition-all duration-300 border-b-4 border-[#0ea5e9] flex flex-col items-center">
+                            <h4 class="text-lg lg:text-xl font-black text-slate-800">FASHA OCTA R.</h4>
+                            <p class="text-xs text-slate-500 font-bold mt-2 uppercase tracking-widest">076</p>
+                        </div>
+                        <div class="glass-light p-6 md:p-8 rounded-[24px] md:rounded-[32px] shadow-sm hover:shadow-lg transform md:hover:-translate-y-2 transition-all duration-300 border-b-4 border-[#11caa0] flex flex-col items-center">
+                            <h4 class="text-lg lg:text-xl font-black text-slate-800">BIMBIM DANY S.</h4>
+                            <p class="text-xs text-slate-500 font-bold mt-2 uppercase tracking-widest">077</p>
+                        </div>
+                        <div class="glass-light p-6 md:p-8 rounded-[24px] md:rounded-[32px] shadow-sm hover:shadow-lg transform md:hover:-translate-y-2 transition-all duration-300 border-b-4 border-[#0ea5e9] flex flex-col items-center">
+                            <h4 class="text-lg lg:text-xl font-black text-slate-800">NAZWA NURUL A.</h4>
+                            <p class="text-xs text-slate-500 font-bold mt-2 uppercase tracking-widest">094</p>
+                        </div>
+                        <div class="glass-light p-6 md:p-8 rounded-[24px] md:rounded-[32px] shadow-sm hover:shadow-lg transform md:hover:-translate-y-2 transition-all duration-300 border-b-4 border-[#11caa0] flex flex-col items-center">
+                            <h4 class="text-lg lg:text-xl font-black text-slate-800">SYAHRIL M.</h4>
+                            <p class="text-xs text-slate-500 font-bold mt-2 uppercase tracking-widest">099</p>
+                        </div>
+                        <div class="glass-light p-6 md:p-8 rounded-[24px] md:rounded-[32px] shadow-sm hover:shadow-lg transform md:hover:-translate-y-2 transition-all duration-300 border-b-4 border-[#0ea5e9] flex flex-col items-center">
+                            <h4 class="text-lg lg:text-xl font-black text-slate-800">REVA IMEILDA</h4>
+                            <p class="text-xs text-slate-500 font-bold mt-2 uppercase tracking-widest">108</p>
+                        </div>
+                        <div class="glass-light p-6 md:p-8 rounded-[24px] md:rounded-[32px] shadow-sm hover:shadow-lg transform md:hover:-translate-y-2 transition-all duration-300 border-b-4 border-[#11caa0] flex flex-col items-center">
+                            <h4 class="text-lg lg:text-xl font-black text-slate-800">DZULFIKAR A.</h4>
+                            <p class="text-xs text-slate-500 font-bold mt-2 uppercase tracking-widest">115</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="toast">
+        <i class="fa-solid fa-circle-check text-[#11caa0]"></i>
+        <div class="flex-1 text-left text-sm" id="toastMessage">Pesan</div>
+    </div>
+
+    <script>
+        // 1. MOBILE MENU
+        let isMobileMenuOpen = false;
+        function toggleMobileMenu() {
+            isMobileMenuOpen = !isMobileMenuOpen;
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+            
+            if (isMobileMenuOpen) {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('flex');
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-xmark');
+            } else {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('flex');
+                menuIcon.classList.remove('fa-xmark');
+                menuIcon.classList.add('fa-bars');
+            }
+        }
+
+        // 2. SPA & TOAST
+        function showToast(message, isError = false) {
+            const toast = document.getElementById("toast");
+            const toastMsg = document.getElementById("toastMessage");
+            toastMsg.innerText = message;
+            
+            if(isError) {
+                toast.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-red-500 text-lg"></i> <div class="flex-1 text-left">${message}</div>`;
+                toast.style.borderColor = "rgba(239, 68, 68, 0.5)"; 
+            } else {
+                toast.innerHTML = `<i class="fa-solid fa-circle-check text-[#11caa0] text-lg"></i> <div class="flex-1 text-left">${message}</div>`;
+                toast.style.borderColor = "rgba(17, 202, 160, 0.3)"; 
+            }
+            toast.className = "show";
+            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page-wrapper').forEach(page => { page.classList.remove('active-page'); });
+            const targetPage = document.getElementById('page-' + pageId);
+            if (targetPage) targetPage.classList.add('active-page');
+            
+            document.querySelectorAll('.nav-link').forEach(link => { link.classList.remove('active'); });
+            const activeNav = document.getElementById('nav-' + pageId);
+            if (activeNav) activeNav.classList.add('active');
+
+            document.querySelectorAll('.nav-link-mobile').forEach(link => { link.classList.remove('active', 'text-[#11caa0]'); });
+            const activeMobileNav = document.getElementById('nav-mobile-' + pageId);
+            if (activeMobileNav) activeMobileNav.classList.add('active', 'text-[#11caa0]');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 3. DROPDOWN & DATA STATE
+        let dataPoints = [];
+        let luasLahan = 1000;
+        let kebutuhanAir = 10; 
+
+        document.getElementById('inputLuas').addEventListener('input', (e) => { 
+            if(e.target.value < 0) e.target.value = 0;
+            luasLahan = Number(e.target.value); 
+            updateUI(); 
+        });
+
+        document.getElementById('selectTanaman').addEventListener('change', (e) => {
+            const val = e.target.value;
+            const inputKebutuhan = document.getElementById('inputKebutuhan');
+            if (val === 'custom') {
+                inputKebutuhan.readOnly = false;
+                inputKebutuhan.classList.remove('bg-slate-50', 'text-slate-500');
+                inputKebutuhan.focus();
+            } else {
+                inputKebutuhan.value = val;
+                inputKebutuhan.readOnly = true;
+                inputKebutuhan.classList.add('bg-slate-50', 'text-slate-500');
+                kebutuhanAir = Number(val);
+                updateUI();
+            }
+            showToast("Konfigurasi diperbarui", false);
+        });
+
+        document.getElementById('inputKebutuhan').addEventListener('input', (e) => { 
+            if(e.target.value < 0) e.target.value = 0;
+            kebutuhanAir = Number(e.target.value); 
+            updateUI(); 
+        });
+
+        // 4. CHART.JS
+        const ctx = document.getElementById('flowChart').getContext('2d');
+        let gradientFill = ctx.createLinearGradient(0, 0, 0, 400);
+        gradientFill.addColorStop(0, 'rgba(17, 202, 160, 0.4)');
+        gradientFill.addColorStop(1, 'rgba(17, 202, 160, 0.0)');
+
+        // Deteksi Mobile untuk ukuran Font Chart
+        const isMobile = window.innerWidth < 768;
+
+        const flowChart = new Chart(ctx, {
+            type: 'line',
+            data: { 
+                labels: [], 
+                datasets: [{ 
+                    label: 'Laju Debit (L/mnt)', 
+                    data: [], 
+                    borderColor: '#11caa0', 
+                    fill: true, 
+                    backgroundColor: gradientFill, 
+                    tension: 0.4, 
+                    borderWidth: isMobile ? 2 : 3,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#11caa0',
+                    pointBorderWidth: 2,
+                    pointRadius: isMobile ? 3 : 4
+                }] 
+            },
+            options: { 
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { 
+                    y: { beginAtZero: true, border: { display: false }, grid: { color: '#f1f5f9' }, ticks: { font: {size: isMobile ? 10 : 12} } },
+                    x: { border: { display: false }, grid: { display: false }, ticks: { font: {size: isMobile ? 10 : 12} } }
+                }
+            }
+        });
+
+        // Resize Listener untuk Chart
+        window.addEventListener('resize', () => {
+            const mobileNow = window.innerWidth < 768;
+            flowChart.options.scales.x.ticks.font.size = mobileNow ? 10 : 12;
+            flowChart.options.scales.y.ticks.font.size = mobileNow ? 10 : 12;
+            flowChart.data.datasets[0].borderWidth = mobileNow ? 2 : 3;
+            flowChart.data.datasets[0].pointRadius = mobileNow ? 3 : 4;
+            flowChart.update();
+        });
+
+        // 5. KALKULUS & UPDATE UI
+        function calculateIntegral() {
+            if (dataPoints.length < 2) return 0;
+            let total = 0;
+            for (let i = 0; i < dataPoints.length - 1; i++) {
+                let dt = dataPoints[i+1].time - dataPoints[i].time;
+                let avg = (dataPoints[i].flow + dataPoints[i+1].flow) / 2;
+                total += dt * avg;
+            }
+            return total;
+        }
+
+        function updateTable() {
+            const tbody = document.getElementById('tableBody');
+            const emptyMsg = document.getElementById('emptyTableMsg');
+            tbody.innerHTML = '';
+
+            if (dataPoints.length < 2) {
+                emptyMsg.style.display = 'block';
+                return;
+            }
+
+            emptyMsg.style.display = 'none';
+            let rowsHTML = '';
+
+            for (let i = 0; i < dataPoints.length - 1; i++) {
+                let t1 = dataPoints[i].time;
+                let t2 = dataPoints[i+1].time;
+                let dt = t2 - t1;
+                let f1 = dataPoints[i].flow;
+                let f2 = dataPoints[i+1].flow;
+                let avg = (f1 + f2) / 2;
+                let area = dt * avg;
+
+                rowsHTML += `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="p-4 font-bold text-slate-400">#${i+1}</td>
+                        <td class="p-4">${t1} &rightarrow; ${t2}</td>
+                        <td class="p-4 font-bold text-blue-600">${dt}</td>
+                        <td class="p-4">${f1} &rightarrow; ${f2}</td>
+                        <td class="p-4 font-bold text-orange-500">${avg.toFixed(1)}</td>
+                        <td class="p-4 text-right font-black text-[#11caa0]">+${area.toFixed(2)}</td>
+                    </tr>
+                `;
+            }
+            tbody.innerHTML = rowsHTML;
+        }
+
+        function updateUI() {
+            const current = calculateIntegral();
+            const target = luasLahan * kebutuhanAir;
+            
+            document.getElementById('cardVolume').innerText = current.toLocaleString('id-ID');
+            let percent = target > 0 ? (current / target) * 100 : 0;
+            document.getElementById('cardPercent').innerText = `${percent.toFixed(1)}%`;
+            document.getElementById('progressBar').style.width = `${Math.min(percent, 100)}%`;
+            
+            flowChart.data.labels = dataPoints.map(d => `${d.time}m`);
+            flowChart.data.datasets[0].data = dataPoints.map(d => d.flow);
+            flowChart.update();
+
+            updateTable();
+        }
+
+        // VALIDASI INPUT FORM
+        document.getElementById('formDebit').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const inputWaktuElem = document.getElementById('inputWaktu');
+            const inputDebitElem = document.getElementById('inputDebit');
+            
+            const time = Number(inputWaktuElem.value);
+            const flow = Number(inputDebitElem.value);
+            
+            if (time < 0 || flow < 0) {
+                showToast("Data tidak boleh bernilai minus!", true);
+                inputWaktuElem.classList.add('input-error');
+                inputDebitElem.classList.add('input-error');
+                setTimeout(() => {
+                    inputWaktuElem.classList.remove('input-error');
+                    inputDebitElem.classList.remove('input-error');
+                }, 1000);
+                return; 
+            }
+
+            const isDuplicate = dataPoints.some(d => d.time === time);
+            if (isDuplicate) {
+                showToast(`Data menit ke-${time} sudah ada!`, true);
+                inputWaktuElem.classList.add('input-error');
+                setTimeout(() => inputWaktuElem.classList.remove('input-error'), 1000);
+                return; 
+            }
+            
+            dataPoints.push({ time, flow });
+            dataPoints.sort((a,b) => a.time - b.time);
+            
+            updateUI();
+            showToast(`Tercatat: Waktu ${time}m, Laju ${flow}L/m`, false);
+            
+            inputWaktuElem.value = dataPoints[dataPoints.length - 1].time + 10;
+            inputDebitElem.value = '';
+            inputDebitElem.focus();
+        });
+
+        function resetData() {
+            if(dataPoints.length > 0 && confirm("Reset semua data simulasi?")) {
+                dataPoints = [];
+                updateUI();
+                document.getElementById('inputWaktu').value = 0;
+                document.getElementById('inputDebit').value = '';
+                showToast("Sistem direset", false);
+            }
+        }
+
+        function downloadExcel() {
+            if(dataPoints.length < 2) return showToast("Butuh min. 2 data untuk validasi!", true);
+            let csv = "Segmen,Waktu Awal,Waktu Akhir,Delta T (mnt),Debit Awal,Debit Akhir,Rata-rata Debit,Volume Segmen (L)\n";
+            for (let i = 0; i < dataPoints.length - 1; i++) {
+                let dt = dataPoints[i+1].time - dataPoints[i].time;
+                let avg = (dataPoints[i].flow + dataPoints[i+1].flow) / 2;
+                let area = dt * avg;
+                csv += `${i+1},${dataPoints[i].time},${dataPoints[i+1].time},${dt},${dataPoints[i].flow},${dataPoints[i+1].flow},${avg.toFixed(1)},${area.toFixed(2)}\n`;
+            }
+            csv += `\nTotal Volume Kalkulus,,,${calculateIntegral().toFixed(2)} L`;
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'Laporan_Validasi_HydroLogic.csv');
+            a.click();
+            showToast("Tabel Laporan Diunduh", false);
+        }
+
+        document.getElementById('inputWaktu').value = 0;
+        updateUI();
+
+    </script>
+</body>
+</html>
