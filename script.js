@@ -211,7 +211,6 @@ function updateUI() {
     updateTable();
 }
 
-// ✅ MODIFIKASI: Waktu otomatis +10 menit setelah input debit berhasil
 document.getElementById('formDebit').addEventListener('submit', (e) => {
     e.preventDefault();
     
@@ -240,18 +239,14 @@ document.getElementById('formDebit').addEventListener('submit', (e) => {
         return; 
     }
     
-    // Simpan data point
     dataPoints.push({ time, flow });
     dataPoints.sort((a,b) => a.time - b.time);
-    
-    // ✅ UPDATE UI & KALCULASI
+
     updateUI();
-    
-    // ✅ AUTO NEXT TIME: Waktu otomatis +10 menit
+
     const nextTime = time + 10;
     inputWaktuElem.value = nextTime;
-    
-    // Clear debit dan focus
+
     inputDebitElem.value = '';
     inputDebitElem.focus();
     
@@ -262,7 +257,7 @@ function resetData() {
     if(dataPoints.length > 0 && confirm("Reset semua data simulasi?")) {
         dataPoints = [];
         updateUI();
-        document.getElementById('inputWaktu').value = 0;  // Reset ke 0
+        document.getElementById('inputWaktu').value = 0;
         document.getElementById('inputDebit').value = '';
         showToast("Sistem direset", false);
     }
