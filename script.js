@@ -231,12 +231,15 @@ document.getElementById('formDebit').addEventListener('submit', (e) => {
         return; 
     }
 
-    const isDuplicate = dataPoints.some(d => d.time === time);
-    if (isDuplicate) {
-        showToast(`Data menit ke-${time} sudah ada!`, true);
-        inputWaktuElem.classList.add('input-error');
-        setTimeout(() => inputWaktuElem.classList.remove('input-error'), 1000);
-        return; 
+    if (dataPoints.length > 0) {
+        const waktuTerakhir = dataPoints[dataPoints.length - 1].time;
+        
+        if (time <= waktuTerakhir) {
+            showToast(`Error: Waktu harus lebih besar dari ${waktuTerakhir} menit!`, true);
+            inputWaktuElem.classList.add('input-error');
+            setTimeout(() => inputWaktuElem.classList.remove('input-error'), 1000);
+            return; 
+        }
     }
     
     dataPoints.push({ time, flow });
