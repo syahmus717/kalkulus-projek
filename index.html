@@ -1,609 +1,343 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HydroLogic | Kelompok 3 Kalkulus</title>
-
+    
     <!-- Library -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    
     <!-- Fonts & Icons -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <!-- CSS Eksternal -->
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body class="bg-slate-50 text-slate-800 antialiased overflow-x-hidden">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#ecfdf5] text-slate-800 antialiased overflow-x-hidden selection:bg-[#11caa0] selection:text-white">
+
     <!-- NAVBAR -->
-    <nav class="fixed top-0 w-full z-[100] glass-dark shadow-sm">
-      <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center py-3 md:py-4">
-          <div
-            class="flex items-center gap-3 cursor-pointer group"
-            onclick="showPage('beranda')"
-          >
-            <div
-              class="bg-gradient-to-br from-[#11caa0] to-[#0ea5e9] p-2 rounded-xl shadow-lg shadow-[#11caa0]/20 group-hover:shadow-[#11caa0]/40 transition duration-300"
-            >
-              <svg
-                class="w-5 h-5 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2.5"
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                ></path>
-              </svg>
+    <nav class="fixed top-0 w-full z-[100] bg-white/80 backdrop-blur-xl border-b border-emerald-100 shadow-[0_4px_30px_rgb(16,185,129,0.05)] transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3 md:py-4">
+                
+                <!-- Logo -->
+                <div class="flex items-center gap-3 cursor-pointer group" onclick="showPage('beranda')">
+                    <div class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#11caa0] to-[#059669] shadow-[0_8px_16px_rgba(17,202,160,0.25)] group-hover:shadow-[0_8px_24px_rgba(17,202,160,0.4)] transition-all duration-300 overflow-hidden">
+                        <div class="absolute inset-0 bg-white/20 group-hover:translate-x-full transition-transform duration-500 ease-in-out -skew-x-12 -translate-x-full"></div>
+                        <i class="fa-solid fa-droplet text-white text-lg"></i>
+                    </div>
+                    <span class="text-xl font-extrabold tracking-tighter text-emerald-900">HYDRO<span class="text-transparent bg-clip-text bg-gradient-to-r from-[#11caa0] to-[#0ea5e9]">LOGIC</span></span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex gap-8 text-sm font-bold uppercase tracking-widest">
+                    <button onclick="showPage('beranda')" id="nav-beranda" class="nav-link active">Beranda</button>
+                    <button onclick="showPage('perhitungan')" id="nav-perhitungan" class="nav-link">Perhitungan</button>
+                    <button onclick="showPage('tentang')" id="nav-tentang" class="nav-link">Tim Kami</button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="text-2xl text-emerald-900 focus:outline-none md:hidden inline cursor-pointer p-2 transition-transform hover:text-[#11caa0]">
+                    <i id="menu-icon" class="fa-solid fa-bars-staggered"></i>
+                </button>
             </div>
-            <span class="text-xl font-extrabold tracking-tighter text-white"
-              >HYDRO<span
-                class="text-transparent bg-clip-text bg-gradient-to-r from-[#11caa0] to-[#0ea5e9]"
-                >LOGIC</span
-              ></span
-            >
-          </div>
 
-          <div
-            class="hidden md:flex gap-8 text-sm font-bold uppercase tracking-widest"
-          >
-            <button
-              onclick="showPage('beranda')"
-              id="nav-beranda"
-              class="nav-link active"
-            >
-              Beranda
-            </button>
-            <button
-              onclick="showPage('perhitungan')"
-              id="nav-perhitungan"
-              class="nav-link"
-            >
-              Perhitungan
-            </button>
-            <button
-              onclick="showPage('tentang')"
-              id="nav-tentang"
-              class="nav-link"
-            >
-              About Us
-            </button>
-          </div>
-
-          <button
-            id="mobile-menu-btn"
-            class="text-2xl text-white focus:outline-none md:hidden inline cursor-pointer p-2 transition-transform"
-          >
-            <i id="menu-icon" class="fa-solid fa-bars"></i>
-          </button>
+            <!-- Mobile Menu Dropdown -->
+            <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-b border-emerald-100 flex-col py-4 px-6 shadow-2xl z-50 md:hidden transition-all duration-300">
+                <button onclick="showPage('beranda')" id="nav-mobile-beranda" class="nav-link-mobile active flex items-center gap-3 py-3.5 px-4 text-left font-bold uppercase text-sm tracking-widest rounded-xl mb-2"><i class="fa-solid fa-house w-5"></i> Beranda</button>
+                <button onclick="showPage('perhitungan')" id="nav-mobile-perhitungan" class="nav-link-mobile flex items-center gap-3 py-3.5 px-4 text-left font-bold uppercase text-sm tracking-widest rounded-xl mb-2"><i class="fa-solid fa-calculator w-5"></i> Perhitungan</button>
+                <button onclick="showPage('tentang')" id="nav-mobile-tentang" class="nav-link-mobile flex items-center gap-3 py-3.5 px-4 text-left font-bold uppercase text-sm tracking-widest rounded-xl"><i class="fa-solid fa-users w-5"></i> Tim Kelompok 3</button>
+            </div>
         </div>
-
-        <div
-          id="mobile-menu"
-          class="hidden absolute top-full left-0 w-full bg-[#0f172a] border-b border-white/10 flex-col py-3 px-4 shadow-2xl z-50 md:hidden transition-all duration-300"
-        >
-          <button
-            onclick="showPage('beranda')"
-            id="nav-mobile-beranda"
-            class="nav-link-mobile active py-3.5 px-4 text-left font-bold uppercase text-sm tracking-widest rounded-r-lg mb-1"
-          >
-            Beranda
-          </button>
-          <button
-            onclick="showPage('perhitungan')"
-            id="nav-mobile-perhitungan"
-            class="nav-link-mobile py-3.5 px-4 text-left font-bold uppercase text-sm tracking-widest rounded-r-lg mb-1"
-          >
-            Perhitungan
-          </button>
-          <button
-            onclick="showPage('tentang')"
-            id="nav-mobile-tentang"
-            class="nav-link-mobile py-3.5 px-4 text-left font-bold uppercase text-sm tracking-widest rounded-r-lg"
-          >
-            About Us
-          </button>
-        </div>
-      </div>
     </nav>
 
     <main class="pt-[64px] md:pt-[76px]">
-      <!-- HALAMAN: BERANDA -->
-      <section id="page-beranda" class="page-wrapper active-page">
-        <div
-          class="relative min-h-[calc(100vh-64px)] md:min-h-[calc(100vh-76px)] flex items-center bg-[#0f172a] text-white overflow-hidden py-10 md:py-12"
-        >
-          <div
-            class="absolute top-0 -left-10 w-64 md:w-96 h-64 md:h-96 bg-[#11caa0] rounded-full mix-blend-multiply filter blur-[100px] md:blur-[150px] opacity-30 md:opacity-20 pointer-events-none"
-          ></div>
-          <div
-            class="absolute bottom-0 -right-10 w-64 md:w-96 h-64 md:h-96 bg-[#0ea5e9] rounded-full mix-blend-multiply filter blur-[100px] md:blur-[150px] opacity-30 md:opacity-20 pointer-events-none"
-          ></div>
 
-          <div
-            class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center w-full relative z-10 py-6"
-          >
-            <div class="text-center lg:text-left">
-              <div
-                class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[#11caa0] text-xs font-bold uppercase tracking-widest mb-6 mx-auto lg:mx-0"
-              >
-                <span
-                  class="w-2 h-2 rounded-full bg-[#11caa0] animate-pulse"
-                ></span>
-                Kalkulus Terapan
-              </div>
-              <h1
-                class="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.2] md:leading-[1.1] mb-6 tracking-tight"
-              >
-                Presisi Irigasi dengan <br class="hidden md:block" />
-                <span
-                  class="text-transparent bg-clip-text bg-gradient-to-r from-[#11caa0] via-[#0ea5e9] to-[#3b82f6]"
-                  >Integral Tentu.</span
-                >
-              </h1>
-              <p
-                class="text-slate-400 text-sm md:text-base lg:text-lg mb-8 md:mb-10 leading-relaxed max-w-xl mx-auto lg:mx-0"
-              >
-                Kelola air irigasi jadi lebih cerdas dan efisien. HydroLogic
-                menggunakan perhitungan <b>Integral Tentu</b> untuk memantau
-                aliran air yang berubah-ubah, memastikan setiap tanaman
-                mendapatkan air dalam jumlah yang tepat tanpa ada yang terbuang
-                sia-sia.
-              </p>
-
-              <button
-                onclick="showPage('perhitungan')"
-                class="w-full sm:w-auto group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-gradient-to-r from-[#11caa0] to-[#0ea5e9] rounded-xl shadow-[0_0_20px_rgba(17,202,160,0.3)] hover:shadow-[0_0_40px_rgba(17,202,160,0.5)] md:hover:-translate-y-1"
-              >
-                <span class="tracking-widest uppercase text-sm"
-                  >Mulai Perhitungan</span
-                >
-                <svg
-                  class="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M14 5l7 7m0 0l-7 7m7-7H3"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-
-            <div class="relative lg:ml-auto w-full mt-6 lg:mt-0">
-              <div
-                class="bg-[rgba(15,23,42,0.6)] backdrop-blur-xl p-8 md:p-10 rounded-[2rem] shadow-2xl relative z-10 border border-white/10 w-full max-w-md mx-auto"
-              >
-                <div class="flex justify-between items-center mb-6 md:mb-8">
-                  <h3
-                    class="text-slate-300 font-bold text-xs tracking-widest uppercase"
-                  >
-                    Formula Engine
-                  </h3>
-                  <div class="flex gap-2">
-                    <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
-                    <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-                    <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
-                  </div>
-                </div>
-                <div
-                  class="bg-[#0b1120] p-6 md:p-8 rounded-2xl mb-6 shadow-inner border border-white/5 text-center relative overflow-hidden group"
-                >
-                  <div
-                    class="absolute inset-0 bg-gradient-to-r from-[#11caa0]/10 to-[#0ea5e9]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  ></div>
-                  <p
-                    class="text-3xl md:text-4xl font-mono italic text-transparent bg-clip-text bg-gradient-to-r from-[#11caa0] to-[#0ea5e9] font-bold tracking-widest"
-                  >
-                    V = ∫<sub class="text-slate-500 text-lg">a</sub
-                    ><sup class="text-slate-500 text-lg">b</sup> f(t) dt
-                  </p>
-                </div>
-                <p
-                  class="text-xs md:text-sm text-slate-400 leading-relaxed text-center font-medium"
-                >
-                  "Menjumlahkan irisan trapesium terkecil dari waktu (t) dan
-                  laju debit f(t) untuk mendapatkan total volume yang presisi."
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- HALAMAN: PERHITUNGAN -->
-      <section id="page-perhitungan" class="page-wrapper">
-        <div class="min-h-screen py-8 md:py-12 bg-[#f8fafc]">
-          <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
-            <div
-              class="mb-6 md:mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-5"
-            >
-              <div>
-                <h2
-                  class="text-3xl md:text-3xl lg:text-4xl font-black text-slate-800 tracking-tight"
-                >
-                  Kalkulator<span
-                    class="text-transparent bg-clip-text bg-gradient-to-r from-[#11caa0] to-[#0ea5e9]"
-                    >.</span
-                  >
-                </h2>
-                <p class="text-slate-500 font-medium mt-1 md:mt-2 text-sm">
-                  Visualisasi real-time & analitik irigasi lahan.
-                </p>
-              </div>
-              <div class="grid grid-cols-2 md:flex gap-3 w-full md:w-auto">
-                <button
-                  onclick="resetData()"
-                  class="justify-center px-4 py-3 md:py-2.5 rounded-xl text-xs font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 hover:text-red-500 transition shadow-sm flex items-center gap-2"
-                >
-                  <i class="fa-solid fa-rotate-right"></i> Reset
-                </button>
-                <button
-                  onclick="downloadExcel()"
-                  class="justify-center bg-slate-900 text-white px-4 py-3 md:py-2.5 rounded-xl text-xs font-bold hover:bg-slate-800 transition shadow-md flex items-center gap-2 md:hover:-translate-y-0.5"
-                >
-                  <i class="fa-solid fa-file-csv text-[#11caa0] text-base"></i>
-                  Export
-                </button>
-              </div>
-            </div>
-
-            <div class="">
-              <div class="xl:col-span-4 space-y-6">
-                <!-- Box Parameter -->
-                <div class="glass-light p-5 md:p-6 rounded-[24px] shadow-sm">
-                  <h3
-                    class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 md:mb-5 flex items-center gap-2"
-                  >
-                    <i class="fa-solid fa-leaf text-[#11caa0]"></i> Parameter
-                    Lahan
-                  </h3>
-                  <div class="space-y-4">
-                    <div>
-                      <label
-                        class="block text-xs font-bold text-slate-500 mb-2 uppercase"
-                        >Jenis Tanaman</label
-                      >
-                      <select
-                        id="selectTanaman"
-                        class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#11caa0] outline-none font-bold text-sm text-slate-700 cursor-pointer transition"
-                      >
-                        <option value="10">Padi (10 L/m²)</option>
-                        <option value="8">Tomat (8 L/m²)</option>
-                        <option value="10" selected>Jagung (10 L/m²)</option>
-                        <option value="12">Cabai (12 L/m²)</option>
-                        <option value="custom">Kustom (Manual)</option>
-                      </select>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                      <div>
-                        <label
-                          class="block text-xs font-bold text-slate-500 mb-2 uppercase"
-                          >Luas (m²)</label
-                        >
-                        <input
-                          type="number"
-                          id="inputLuas"
-                          value="1000"
-                          min="0"
-                          class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#11caa0] outline-none font-bold text-sm text-slate-700 transition"
-                        />
-                      </div>
-                      <div>
-                        <label
-                          class="block text-xs font-bold text-slate-500 mb-2 uppercase"
-                          >Kebutuhan</label
-                        >
-                        <input
-                          type="number"
-                          id="inputKebutuhan"
-                          value="10"
-                          min="0"
-                          readonly
-                          class="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none font-bold text-sm bg-slate-50 text-slate-500 shadow-inner"
-                        />
-                      </div>
-                    </div>
-                  </div>
+        <!-- ================= HALAMAN 1: BERANDA ================= -->
+        <section id="page-beranda" class="page-wrapper active-page">
+            <div class="relative min-h-[calc(100vh-64px)] md:min-h-[calc(100vh-76px)] flex items-center bg-[#022c22] text-white overflow-hidden py-10 md:py-12">
+                <div class="absolute inset-0 z-0 opacity-50">
+                    <div class="absolute top-[-10%] -left-[10%] w-[50%] h-[50%] bg-[#11caa0] rounded-full mix-blend-screen filter blur-[120px] animate-blob"></div>
+                    <div class="absolute top-[20%] -right-[10%] w-[50%] h-[50%] bg-[#0ea5e9] rounded-full mix-blend-screen filter blur-[120px] animate-blob animation-delay-2000"></div>
+                    <div class="absolute -bottom-[20%] left-[20%] w-[50%] h-[50%] bg-[#10b981] rounded-full mix-blend-screen filter blur-[120px] animate-blob animation-delay-4000"></div>
                 </div>
 
-                <!-- Box Sensor -->
-                <form
-                  id="formDebit"
-                  class="bg-gradient-to-br from-[#0f172a] to-[#1e293b] p-5 md:p-6 rounded-[24px] shadow-xl text-white relative overflow-hidden"
-                >
-                  <div
-                    class="absolute top-0 right-0 w-32 h-32 bg-[#11caa0] rounded-full mix-blend-overlay filter blur-2xl opacity-20"
-                  ></div>
-                  <h3
-                    class="text-xs font-bold text-[#11caa0] uppercase tracking-widest mb-5 relative z-10 flex items-center gap-2"
-                  >
-                    <i class="fa-solid fa-stopwatch"></i> Entri Sensor Laju
-                  </h3>
-                  <div class="grid grid-cols-2 gap-4 mb-6 relative z-10">
-                    <div>
-                      <label
-                        class="block text-xs text-slate-400 font-bold mb-2 uppercase"
-                        >Waktu (Mnt)</label
-                      >
-                      <input
-                        type="number"
-                        id="inputWaktu"
-                        min="0"
-                        class="w-full px-4 py-3 bg-[#0f172a]/50 border border-slate-600 rounded-xl outline-none font-mono text-base focus:border-[#11caa0] transition-colors"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label
-                        class="block text-xs text-slate-400 font-bold mb-2 uppercase"
-                        >Debit (L/m)</label
-                      >
-                      <input
-                        type="number"
-                        id="inputDebit"
-                        min="0"
-                        class="w-full px-4 py-3 bg-[#0f172a]/50 border border-slate-600 rounded-xl outline-none font-mono text-base focus:border-[#11caa0] transition-colors"
-                        placeholder="0"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <button
-                    type="submit"
-                    class="w-full py-4 bg-gradient-to-r from-[#11caa0] to-[#0ea5e9] text-white font-black rounded-xl hover:shadow-[0_0_15px_rgba(17,202,160,0.4)] transition-all uppercase tracking-widest text-xs relative z-10 md:hover:-translate-y-0.5"
-                  >
-                    Simpan & Kalkulasi
-                  </button>
-                </form>
-              </div>
+                <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center w-full relative z-10 py-6">
+                    <div class="text-center lg:text-left">
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-[#11caa0]/30 text-[#11caa0] text-xs font-bold uppercase tracking-widest mb-6 mx-auto lg:mx-0 shadow-[0_0_20px_rgba(17,202,160,0.15)]">
+                            <span class="relative flex h-2 w-2">
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#11caa0] opacity-75"></span>
+                              <span class="relative inline-flex rounded-full h-2 w-2 bg-[#11caa0]"></span>
+                            </span>
+                            Kalkulus Terapan
+                        </div>
+                        <h1 class="text-5xl md:text-6xl lg:text-7xl font-black leading-[1.1] md:leading-[1.05] mb-6 tracking-tight">
+                            Presisi Irigasi <br class="hidden md:block">dengan <br class="block md:hidden">
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#11caa0] via-[#0ea5e9] to-[#10b981]">Integral Tentu.</span>
+                        </h1>
+                        <p class="text-emerald-100/70 text-sm md:text-base lg:text-lg mb-8 md:mb-10 leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium">
+                            Kelola air irigasi jadi lebih cerdas dan efisien. HydroLogic menggunakan perhitungan <b>Integral Tentu</b> untuk memantau aliran air yang berubah-ubah, memastikan setiap tanaman mendapatkan air dalam jumlah yang tepat tanpa ada yang terbuang sia-sia.
+                        </p>
 
-              <div class="xl:col-span-8 space-y-6">
-                <!-- Box Visualisasi -->
-                <div class="grid grid-cols-2 gap-4 md:gap-6">
-                  <div class="glass-light p-5 md:p-6 rounded-[24px] shadow-sm">
-                    <span
-                      class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest block mb-2"
-                      >Terakumulasi</span
-                    >
-                    <h2
-                      class="text-2xl md:text-4xl font-black text-slate-800 font-mono tracking-tight break-words"
-                    >
-                      <span id="cardVolume">0</span>
-                      <span
-                        class="text-base md:text-xl text-slate-400 font-sans"
-                        >L</span
-                      >
-                    </h2>
-                  </div>
-                  <div class="glass-light p-5 md:p-6 rounded-[24px] shadow-sm">
-                    <span
-                      class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest block mb-2"
-                      >Pencapaian Target</span
-                    >
-                    <h2
-                      id="cardPercent"
-                      class="text-2xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#11caa0] to-[#0ea5e9] font-mono tracking-tight"
-                    >
-                      0%
-                    </h2>
-                    <div
-                      class="w-full bg-slate-100 h-1.5 rounded-full mt-3 md:mt-4 overflow-hidden"
-                    >
-                      <div
-                        id="progressBar"
-                        class="h-full bg-gradient-to-r from-[#11caa0] to-[#0ea5e9] transition-all duration-1000 ease-out"
-                        style="width: 0%"
-                      ></div>
+                        <button onclick="showPage('perhitungan')" class="w-full sm:w-auto group relative inline-flex items-center justify-center px-8 py-4 font-black text-white transition-all duration-300 bg-gradient-to-r from-[#11caa0] to-[#059669] rounded-2xl shadow-[0_8px_30px_rgba(17,202,160,0.3)] hover:shadow-[0_8px_40px_rgba(17,202,160,0.5)] md:hover:-translate-y-1 overflow-hidden">
+                            <div class="absolute inset-0 bg-white/20 group-hover:translate-x-full transition-transform duration-500 ease-in-out -skew-x-12 -translate-x-full"></div>
+                            <span class="tracking-widest uppercase text-sm relative z-10">Mulai Perhitungan</span>
+                            <i class="fa-solid fa-water ml-3 group-hover:translate-x-1 transition-transform relative z-10"></i>
+                        </button>
                     </div>
-                  </div>
+                    
+                    <div class="relative lg:ml-auto w-full mt-6 lg:mt-0 perspective-1000">
+                        <div class="bg-white/5 backdrop-blur-2xl p-8 md:p-10 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.3)] relative z-10 border border-emerald-500/20 w-full max-w-md mx-auto transform transition-transform duration-500 hover:rotate-y-2 hover:rotate-x-2">
+                            <div class="flex justify-between items-center mb-6 md:mb-8">
+                                <h3 class="text-emerald-300 font-bold text-xs tracking-widest uppercase flex items-center gap-2">
+                                    <i class="fa-solid fa-microchip text-[#11caa0]"></i> Formula Engine
+                                </h3>
+                                <div class="flex gap-2">
+                                    <div class="w-3 h-3 rounded-full bg-red-500/80 shadow-[0_0_10px_rgba(239,68,68,0.5)]"></div>
+                                    <div class="w-3 h-3 rounded-full bg-yellow-500/80 shadow-[0_0_10px_rgba(234,179,8,0.5)]"></div>
+                                    <div class="w-3 h-3 rounded-full bg-[#11caa0] shadow-[0_0_10px_rgba(17,202,160,0.5)]"></div>
+                                </div>
+                            </div>
+                            <div class="bg-[#021f18] p-6 md:p-8 rounded-2xl mb-6 shadow-inner border border-emerald-500/10 text-center relative overflow-hidden group">
+                                <p class="text-4xl md:text-5xl font-mono italic text-transparent bg-clip-text bg-gradient-to-r from-[#11caa0] to-[#0ea5e9] font-black tracking-widest relative z-10">
+                                    V = ∫<sub class="text-emerald-700 text-lg md:text-xl">a</sub><sup class="text-emerald-700 text-lg md:text-xl">b</sup> f(t) dt
+                                </p>
+                            </div>
+                            <p class="text-xs md:text-sm text-emerald-100/60 leading-relaxed text-center font-medium">
+                                Menjumlahkan irisan trapesium terkecil dari waktu (t) dan laju debit f(t) untuk visualisasi volume irigasi yang presisi.
+                            </p>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </section>
 
-                <div
-                  class="glass-light p-5 md:p-8 rounded-[24px] shadow-sm h-[280px] sm:h-[350px] md:h-[420px] relative w-full"
-                >
-                  <div
-                    class="absolute top-4 md:top-6 right-4 md:right-8 flex items-center gap-2 z-10 bg-white/80 md:bg-transparent px-2.5 py-1 md:p-0 rounded-full"
-                  >
-                    <span
-                      class="w-2 h-2 rounded-full bg-[#11caa0] animate-pulse"
-                    ></span>
-                    <span
-                      class="text-[10px] font-bold text-slate-500 md:text-slate-400 uppercase tracking-widest"
-                      >Live Area</span
-                    >
-                  </div>
-                  <canvas id="flowChart"></canvas>
-                </div>
-
-                <div
-                  class="glass-light p-5 md:p-6 rounded-[24px] shadow-sm relative w-full overflow-hidden"
-                >
-                  <h3
-                    class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2"
-                  >
-                    <i class="fa-solid fa-table text-[#11caa0]"></i> Validasi
-                    Langkah
-                  </h3>
-                  <div
-                    class="overflow-x-auto max-h-60 rounded-xl border border-slate-100 w-full"
-                  >
-                    <table
-                      class="w-full text-left border-collapse whitespace-nowrap min-w-[500px]"
-                    >
-                      <thead class="sticky top-0 bg-white shadow-sm z-10">
-                        <tr
-                          class="text-[10px] md:text-xs uppercase tracking-wider text-slate-500 bg-slate-50"
-                        >
-                          <th class="p-4 font-bold rounded-tl-xl">
-                            Irisan (i)
-                          </th>
-                          <th class="p-4 font-bold">Waktu (a&rightarrow;b)</th>
-                          <th class="p-4 font-bold text-blue-600">
-                            &Delta;t (mnt)
-                          </th>
-                          <th class="p-4 font-bold">
-                            Debit (f(a)&rightarrow;f(b))
-                          </th>
-                          <th class="p-4 font-bold text-orange-500">
-                            Rata-rata
-                          </th>
-                          <th
-                            class="p-4 font-bold text-right text-[#11caa0] rounded-tr-xl"
-                          >
-                            Vol (L)
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody
-                        id="tableBody"
-                        class="text-xs md:text-sm font-mono text-slate-700 divide-y divide-slate-100 bg-white"
-                      >
-                        <!-- Data akan dirender JS -->
-                      </tbody>
-                    </table>
-                    <div
-                      id="emptyTableMsg"
-                      class="text-center p-8 md:p-10 text-slate-400 text-xs font-bold uppercase tracking-widest bg-white"
-                    >
-                      <i
-                        class="fa-solid fa-chart-area block text-3xl mb-3 opacity-50"
-                      ></i>
-                      Belum ada data kalkulus.
+        <!-- ================= HALAMAN 2: PERHITUNGAN ================= -->
+        <section id="page-perhitungan" class="page-wrapper">
+            <div class="min-h-screen py-8 md:py-12 bg-[#ecfdf5] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNDQnIGhlaWdodD0nNzInIHZpZXdCb3g9JzAgMCAxNDQgNzInPjxwYXRoIGZpbGwtb3BhY2l0eT0nMC41JyBkPSJNMCw3MkwwLDM2QzI0LDM2IDI0LDAgNDgsMEM3MiwwIDcyLDM2IDk2LDM2QzEyMCwzNiAxMjAsMCAxNDQsMEwxNDQsNzJaIiBmaWxsPSIjMTBiOTgxIiBvcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] bg-repeat">
+                <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+                    
+                    <!-- Header Dashboard -->
+                    <div class="mb-6 md:mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-5">
+                        <div>
+                            <h2 class="text-3xl md:text-4xl font-black text-emerald-900 tracking-tight">Kalkulator<span class="text-[#11caa0]">.</span></h2>
+                            <p class="text-emerald-600/80 font-semibold mt-1 md:mt-2 text-sm">Visualisasi real-time & analitik irigasi lahan.</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 md:flex gap-3 w-full md:w-auto">
+                            <button onclick="resetData()" class="justify-center px-5 py-3 md:py-2.5 rounded-xl text-xs font-bold text-emerald-700 bg-white/80 backdrop-blur-sm border border-emerald-200 hover:bg-white hover:text-red-500 transition-all shadow-[0_4px_15px_rgba(16,185,129,0.05)] hover:shadow-md flex items-center gap-2 active:scale-95">
+                                <i class="fa-solid fa-rotate-right"></i> Reset
+                            </button>
+                            <button onclick="downloadExcel()" class="justify-center bg-emerald-900 text-white px-5 py-3 md:py-2.5 rounded-xl text-xs font-bold hover:bg-emerald-950 transition-all shadow-[0_4px_15px_rgba(16,185,129,0.2)] hover:shadow-lg flex items-center gap-2 md:hover:-translate-y-0.5 active:scale-95">
+                                <i class="fa-solid fa-file-csv text-[#11caa0] text-base"></i> Export
+                            </button>
+                        </div>
                     </div>
-                  </div>
+
+                    <!-- Layout Grid -->
+                    <div class="">
+                        
+                        <!-- PANEL KIRI (Form Input) -->
+                        <div class="xl:col-span-4 space-y-6">
+                            
+                            <!-- Box Lahan -->
+                            <div class="bg-white/90 backdrop-blur-md p-6 md:p-7 rounded-[24px] shadow-[0_8px_30px_rgb(16,185,129,0.06)] border border-emerald-100 hover:shadow-[0_8px_30px_rgb(16,185,129,0.1)] transition-shadow">
+                                <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-5 flex items-center gap-2">
+                                    <div class="p-1.5 bg-emerald-100 text-[#11caa0] rounded-lg"><i class="fa-solid fa-leaf"></i></div>
+                                    Parameter Lahan
+                                </h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-emerald-700/70 mb-2 uppercase">Jenis Tanaman</label>
+                                        <div class="relative">
+                                            <select id="selectTanaman" class="appearance-none w-full px-4 py-3.5 bg-emerald-50/50 border border-emerald-200 rounded-xl focus:ring-2 focus:ring-[#11caa0]/50 focus:border-[#11caa0] outline-none font-bold text-sm text-emerald-900 cursor-pointer transition-all hover:bg-white">
+                                                <option value="10">Padi (10 L/m²)</option>
+                                                <option value="8">Tomat (8 L/m²)</option>
+                                                <option value="10" selected>Jagung (10 L/m²)</option>
+                                                <option value="12">Cabai (12 L/m²)</option>
+                                                <option value="custom">Kustom (Manual)</option>
+                                            </select>
+                                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-emerald-500">
+                                                <i class="fa-solid fa-chevron-down text-xs"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-xs font-bold text-emerald-700/70 mb-2 uppercase">Luas (m²)</label>
+                                            <input type="number" id="inputLuas" value="1000" min="0" class="w-full px-4 py-3.5 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-[#11caa0]/50 focus:border-[#11caa0] outline-none font-bold text-sm text-emerald-900 transition-all shadow-sm">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-bold text-emerald-700/70 mb-2 uppercase">Kebutuhan</label>
+                                            <div class="relative">
+                                                <input type="number" id="inputKebutuhan" value="10" min="0" readonly class="w-full px-4 py-3.5 border border-emerald-200 rounded-xl outline-none font-bold text-sm bg-emerald-50/50 text-emerald-700 shadow-inner">
+                                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-emerald-500">L/m²</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Box Sensor -->
+                            <form id="formDebit" class="bg-[#022c22] p-6 md:p-7 rounded-[24px] shadow-[0_20px_40px_rgba(16,185,129,0.2)] border border-[#064e3b] text-white relative overflow-hidden group">
+                                <div class="absolute -right-10 -top-10 w-40 h-40 bg-gradient-to-br from-[#11caa0] to-[#0ea5e9] rounded-full mix-blend-overlay filter blur-[50px] opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
+                                <h3 class="text-xs font-bold text-[#11caa0] uppercase tracking-widest mb-6 relative z-10 flex items-center gap-2">
+                                    <div class="p-1.5 bg-[#11caa0]/10 text-[#11caa0] rounded-lg"><i class="fa-solid fa-stopwatch"></i></div>
+                                    Entri Sensor Laju
+                                </h3>
+                                <div class="grid grid-cols-2 gap-4 mb-6 relative z-10">
+                                    <div>
+                                        <label class="block text-xs text-emerald-200/70 font-bold mb-2 uppercase">Waktu <span class="text-emerald-500/50 normal-case">(Mnt)</span></label>
+                                        <input type="number" id="inputWaktu" min="0" step="10" class="w-full px-4 py-3.5 bg-white/5 border border-emerald-500/20 rounded-xl outline-none font-mono text-base focus:border-[#11caa0] focus:bg-white/10 transition-colors shadow-inner" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs text-emerald-200/70 font-bold mb-2 uppercase">Debit <span class="text-emerald-500/50 normal-case">(L/m)</span></label>
+                                        <input type="number" id="inputDebit" min="0" class="w-full px-4 py-3.5 bg-white/5 border border-emerald-500/20 rounded-xl outline-none font-mono text-base focus:border-[#11caa0] focus:bg-white/10 transition-colors shadow-inner" placeholder="0" required>
+                                    </div>
+                                </div>
+                                <button type="submit" class="w-full py-4 bg-gradient-to-r from-[#11caa0] to-[#059669] text-white font-black rounded-xl hover:shadow-[0_0_20px_rgba(17,202,160,0.5)] transition-all uppercase tracking-widest text-xs relative z-10 active:scale-95">Simpan & Kalkulasi</button>
+                            </form>
+                        </div>
+
+                        <!-- PANEL KANAN (Visualisasi & Tabel) -->
+                        <div class="xl:col-span-8 space-y-6">
+                            
+                            <!-- Stats Cards -->
+                            <div class="grid grid-cols-2 gap-4 md:gap-6">
+                                <div class="relative bg-white/90 backdrop-blur-md p-6 md:p-7 rounded-[24px] shadow-[0_8px_30px_rgb(16,185,129,0.04)] border border-emerald-100 overflow-hidden group hover:shadow-[0_8px_30px_rgb(16,185,129,0.08)] transition-all">
+                                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-[#0ea5e9]/10 rounded-full group-hover:scale-150 transition-transform duration-700 ease-in-out"></div>
+                                    <div class="relative z-10">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-[10px] md:text-xs font-bold text-emerald-600 uppercase tracking-widest">Terakumulasi</span>
+                                            <i class="fa-solid fa-water text-[#0ea5e9]/70"></i>
+                                        </div>
+                                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-emerald-950 font-mono tracking-tight break-words"><span id="cardVolume">0</span> <span class="text-lg md:text-2xl text-emerald-400 font-sans">L</span></h2>
+                                    </div>
+                                </div>
+                                <div class="relative bg-white/90 backdrop-blur-md p-6 md:p-7 rounded-[24px] shadow-[0_8px_30px_rgb(16,185,129,0.04)] border border-emerald-100 overflow-hidden group hover:shadow-[0_8px_30px_rgb(16,185,129,0.08)] transition-all">
+                                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-[#11caa0]/10 rounded-full group-hover:scale-150 transition-transform duration-700 ease-in-out"></div>
+                                    <div class="relative z-10">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-[10px] md:text-xs font-bold text-emerald-600 uppercase tracking-widest">Target Lahan</span>
+                                            <i class="fa-solid fa-bullseye text-[#11caa0]/70"></i>
+                                        </div>
+                                        <h2 id="cardPercent" class="text-3xl md:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#11caa0] to-[#0ea5e9] font-mono tracking-tight">0%</h2>
+                                        <div class="w-full bg-emerald-50 h-1.5 md:h-2 rounded-full mt-4 md:mt-5 overflow-hidden shadow-inner">
+                                            <div id="progressBar" class="h-full bg-gradient-to-r from-[#11caa0] to-[#0ea5e9] transition-all duration-1000 ease-out relative" style="width: 0%">
+                                                <div class="absolute top-0 left-0 w-full h-full bg-white/20 animate-pulse"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Area Chart -->
+                            <div class="bg-white/90 backdrop-blur-md p-5 md:p-8 rounded-[24px] shadow-[0_8px_30px_rgb(16,185,129,0.04)] border border-emerald-100 h-[280px] sm:h-[350px] md:h-[400px] relative w-full group">
+                                <div class="absolute top-5 md:top-8 right-5 md:right-8 flex items-center gap-2 z-10 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200">
+                                    <span class="relative flex h-2 w-2">
+                                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#11caa0] opacity-75"></span>
+                                      <span class="relative inline-flex rounded-full h-2 w-2 bg-[#11caa0]"></span>
+                                    </span>
+                                    <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Live Area</span>
+                                </div>
+                                <canvas id="flowChart"></canvas>
+                            </div>
+
+                            <!-- Tabel Validasi Kalkulus -->
+                            <div class="bg-white/90 backdrop-blur-md p-5 md:p-7 rounded-[24px] shadow-[0_8px_30px_rgb(16,185,129,0.04)] border border-emerald-100 relative w-full overflow-hidden">
+                                <div class="flex items-center justify-between mb-5">
+                                    <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-widest flex items-center gap-2">
+                                        <div class="p-1.5 bg-[#0ea5e9]/10 text-[#0ea5e9] rounded-lg"><i class="fa-solid fa-table-list"></i></div>
+                                        Validasi Langkah Trapesium
+                                    </h3>
+                                </div>
+                                
+                                <div class="overflow-x-auto max-h-64 rounded-xl border border-emerald-100 custom-scrollbar w-full relative">
+                                    <table class="w-full text-left border-collapse whitespace-nowrap min-w-[550px]">
+                                        <thead class="sticky top-0 z-20">
+                                            <tr class="text-[10px] md:text-xs uppercase tracking-wider text-emerald-700 bg-emerald-50/95 backdrop-blur-md shadow-sm">
+                                                <th class="p-4 font-bold rounded-tl-xl border-b border-emerald-100 w-16 text-center">i</th>
+                                                <th class="p-4 font-bold border-b border-emerald-100"><i class="fa-regular fa-clock mr-1"></i> Waktu (Mnt)</th>
+                                                <th class="p-4 font-bold text-[#0ea5e9] border-b border-emerald-100">&Delta;t</th>
+                                                <th class="p-4 font-bold border-b border-emerald-100"><i class="fa-solid fa-gauge-high mr-1"></i> Debit (L)</th>
+                                                <th class="p-4 font-bold text-orange-500 border-b border-emerald-100">Rata-rata</th>
+                                                <th class="p-4 font-bold text-right text-[#11caa0] rounded-tr-xl border-b border-emerald-100">+ Vol (L)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableBody" class="text-xs md:text-sm font-mono text-emerald-900 divide-y divide-emerald-50 bg-white/50">
+                                            <!-- Data baris tabel dirender disini -->
+                                        </tbody>
+                                    </table>
+                                    <div id="emptyTableMsg" class="absolute inset-0 flex flex-col items-center justify-center bg-white/80 backdrop-blur-[2px] z-10 h-48">
+                                        <div class="w-12 h-12 bg-emerald-50 text-emerald-300 rounded-full flex items-center justify-center mb-3 text-xl"><i class="fa-solid fa-water"></i></div>
+                                        <p class="text-emerald-500 text-xs font-bold uppercase tracking-widest">Belum ada data kalkulus.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- ABOUT US -->
-      <section id="page-tentang" class="page-wrapper">
-        <div
-          class="min-h-screen py-16 md:py-20 bg-slate-50 relative overflow-hidden"
-        >
-          <div class="max-w-6xl mx-auto px-5 sm:px-6 text-center relative z-10">
-            <div class="mb-12 md:mb-16">
-              <span
-                class="inline-block py-1.5 px-4 rounded-full bg-slate-200 text-slate-600 text-xs font-bold tracking-widest uppercase mb-4"
-                >Informatika UNSIL 2025</span
-              >
-              <h2
-                class="text-4xl md:text-5xl font-black text-slate-800 tracking-tight"
-              >
-                <span
-                  class="text-transparent bg-clip-text bg-gradient-to-r from-[#11caa0] to-[#0ea5e9]"
-                  >Kelompok 3</span
-                >
-              </h2>
+        <!-- ================= HALAMAN 3: TENTANG KAMI ================= -->
+        <section id="page-tentang" class="page-wrapper">
+            <!-- Background Hijau Transparan dengan Motif Air -->
+            <div class="min-h-screen py-16 md:py-20 bg-[#ecfdf5] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNDQnIGhlaWdodD0nNzInIHZpZXdCb3g9JzAgMCAxNDQgNzInPjxwYXRoIGZpbGwtb3BhY2l0eT0nMC41JyBkPSJNMCw3MkwwLDM2QzI0LDM2IDI0LDAgNDgsMEM3MiwwIDcyLDM2IDk2LDM2QzEyMCwzNiAxMjAsMCAxNDQsMEwxNDQsNzJaIiBmaWxsPSIjMTBiOTgxIiBvcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] bg-repeat relative overflow-hidden">
+                
+                <div class="max-w-6xl mx-auto px-5 sm:px-6 text-center relative z-10">
+                    
+                    <div class="mb-14 md:mb-20">
+                        <span class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-white/80 text-emerald-700 text-xs font-bold tracking-widest uppercase mb-4 shadow-sm border border-emerald-200">
+                            <i class="fa-solid fa-graduation-cap text-[#11caa0]"></i> Informatika UNSIL 2025
+                        </span>
+                        <h2 class="text-4xl md:text-5xl lg:text-6xl font-black text-emerald-950 tracking-tight"><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#11caa0] to-[#0ea5e9]">Kelompok 3</span></h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                        <!-- Card Anggota dengan Hover Effect Premium -->
+                        <div class="bg-white/90 backdrop-blur-sm p-8 rounded-[32px] shadow-[0_10px_30px_rgba(16,185,129,0.05)] border border-emerald-100 hover:shadow-[0_20px_40px_rgba(17,202,160,0.15)] transform md:hover:-translate-y-2 transition-all duration-300 border-b-[4px] border-b-[#0ea5e9] flex flex-col items-center group">
+                            <h4 class="text-lg lg:text-xl font-black text-emerald-900">FASHA OCTA RAMDANI</h4>
+                            <p class="text-xs text-[#0ea5e9] font-bold mt-2 uppercase tracking-widest bg-[#0ea5e9]/10 px-3 py-1 rounded-md">076</p>
+                        </div>
+                        <div class="bg-white/90 backdrop-blur-sm p-8 rounded-[32px] shadow-[0_10px_30px_rgba(16,185,129,0.05)] border border-emerald-100 hover:shadow-[0_20px_40px_rgba(17,202,160,0.15)] transform md:hover:-translate-y-2 transition-all duration-300 border-b-[4px] border-b-[#11caa0] flex flex-col items-center group">
+                            <h4 class="text-lg lg:text-xl font-black text-emerald-900">BIMBIM DANY SAPUTRA</h4>
+                            <p class="text-xs text-[#11caa0] font-bold mt-2 uppercase tracking-widest bg-[#11caa0]/10 px-3 py-1 rounded-md">077</p>
+                        </div>
+                        <div class="bg-white/90 backdrop-blur-sm p-8 rounded-[32px] shadow-[0_10px_30px_rgba(16,185,129,0.05)] border border-emerald-100 hover:shadow-[0_20px_40px_rgba(17,202,160,0.15)] transform md:hover:-translate-y-2 transition-all duration-300 border-b-[4px] border-b-[#0ea5e9] flex flex-col items-center group">
+                            <h4 class="text-lg lg:text-xl font-black text-emerald-900">NAZWA NURUL AULIA</h4>
+                            <p class="text-xs text-[#0ea5e9] font-bold mt-2 uppercase tracking-widest bg-[#0ea5e9]/10 px-3 py-1 rounded-md">094</p>
+                        </div>
+                        <div class="bg-white/90 backdrop-blur-sm p-8 rounded-[32px] shadow-[0_10px_30px_rgba(16,185,129,0.05)] border border-emerald-100 hover:shadow-[0_20px_40px_rgba(17,202,160,0.15)] transform md:hover:-translate-y-2 transition-all duration-300 border-b-[4px] border-b-[#11caa0] flex flex-col items-center group">
+                            <h4 class="text-lg lg:text-xl font-black text-emerald-900">SYAHRIL MUSTHOFA</h4>
+                            <p class="text-xs text-[#11caa0] font-bold mt-2 uppercase tracking-widest bg-[#11caa0]/10 px-3 py-1 rounded-md">099</p>
+                        </div>
+                        <div class="bg-white/90 backdrop-blur-sm p-8 rounded-[32px] shadow-[0_10px_30px_rgba(16,185,129,0.05)] border border-emerald-100 hover:shadow-[0_20px_40px_rgba(17,202,160,0.15)] transform md:hover:-translate-y-2 transition-all duration-300 border-b-[4px] border-b-[#0ea5e9] flex flex-col items-center group">
+                            <h4 class="text-lg lg:text-xl font-black text-emerald-900">REVA IMEILDA</h4>
+                            <p class="text-xs text-[#0ea5e9] font-bold mt-2 uppercase tracking-widest bg-[#0ea5e9]/10 px-3 py-1 rounded-md">108</p>
+                        </div>
+                        <div class="bg-white/90 backdrop-blur-sm p-8 rounded-[32px] shadow-[0_10px_30px_rgba(16,185,129,0.05)] border border-emerald-100 hover:shadow-[0_20px_40px_rgba(17,202,160,0.15)] transform md:hover:-translate-y-2 transition-all duration-300 border-b-[4px] border-b-[#11caa0] flex flex-col items-center group">
+                            <h4 class="text-lg lg:text-xl font-black text-emerald-900">DZULFIKAR ALHAMRI</h4>
+                            <p class="text-xs text-[#11caa0] font-bold mt-2 uppercase tracking-widest bg-[#11caa0]/10 px-3 py-1 rounded-md">115</p>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </section>
 
-            <div
-              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-8"
-            >
-              <div
-                class="glass-light p-6 md:p-8 rounded-[24px] md:rounded-[32px] shadow-sm hover:shadow-lg transform md:hover:-translate-y-2 transition-all duration-300 border-b-4 border-[#0ea5e9] flex flex-col items-center"
-              >
-                <h4 class="text-lg lg:text-xl font-black text-slate-800">
-                  FASHA OCTA RAMDANI
-                </h4>
-                <p
-                  class="text-xs text-slate-500 font-bold mt-2 uppercase tracking-widest"
-                >
-                  076
-                </p>
-              </div>
-              <div
-                class="glass-light p-6 md:p-8 rounded-[24px] md:rounded-[32px] shadow-sm hover:shadow-lg transform md:hover:-translate-y-2 transition-all duration-300 border-b-4 border-[#11caa0] flex flex-col items-center"
-              >
-                <h4 class="text-lg lg:text-xl font-black text-slate-800">
-                  BIMBIM DANY SAPUTRA
-                </h4>
-                <p
-                  class="text-xs text-slate-500 font-bold mt-2 uppercase tracking-widest"
-                >
-                  077
-                </p>
-              </div>
-              <div
-                class="glass-light p-6 md:p-8 rounded-[24px] md:rounded-[32px] shadow-sm hover:shadow-lg transform md:hover:-translate-y-2 transition-all duration-300 border-b-4 border-[#0ea5e9] flex flex-col items-center"
-              >
-                <h4 class="text-lg lg:text-xl font-black text-slate-800">
-                  NAZWA NURUL AULIA
-                </h4>
-                <p
-                  class="text-xs text-slate-500 font-bold mt-2 uppercase tracking-widest"
-                >
-                  094
-                </p>
-              </div>
-              <div
-                class="glass-light p-6 md:p-8 rounded-[24px] md:rounded-[32px] shadow-sm hover:shadow-lg transform md:hover:-translate-y-2 transition-all duration-300 border-b-4 border-[#11caa0] flex flex-col items-center"
-              >
-                <h4 class="text-lg lg:text-xl font-black text-slate-800">
-                  SYAHRIL MUSTHOFA
-                </h4>
-                <p
-                  class="text-xs text-slate-500 font-bold mt-2 uppercase tracking-widest"
-                >
-                  099
-                </p>
-              </div>
-              <div
-                class="glass-light p-6 md:p-8 rounded-[24px] md:rounded-[32px] shadow-sm hover:shadow-lg transform md:hover:-translate-y-2 transition-all duration-300 border-b-4 border-[#0ea5e9] flex flex-col items-center"
-              >
-                <h4 class="text-lg lg:text-xl font-black text-slate-800">
-                  REVA IMEILDA
-                </h4>
-                <p
-                  class="text-xs text-slate-500 font-bold mt-2 uppercase tracking-widest"
-                >
-                  108
-                </p>
-              </div>
-              <div
-                class="glass-light p-6 md:p-8 rounded-[24px] md:rounded-[32px] shadow-sm hover:shadow-lg transform md:hover:-translate-y-2 transition-all duration-300 border-b-4 border-[#11caa0] flex flex-col items-center"
-              >
-                <h4 class="text-lg lg:text-xl font-black text-slate-800">
-                  DZULFIKAR ALHAMRI
-                </h4>
-                <p
-                  class="text-xs text-slate-500 font-bold mt-2 uppercase tracking-widest"
-                >
-                  115
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
     </main>
 
-    <!-- TOAST -->
+    <!-- TOAST NOTIFICATION -->
     <div id="toast">
-      <i class="fa-solid fa-circle-check text-[#11caa0]"></i>
-      <div class="flex-1 text-left text-sm" id="toastMessage">Pesan</div>
+        <i class="fa-solid fa-circle-check text-[#11caa0]"></i>
+        <div class="flex-1 text-left text-sm font-semibold" id="toastMessage">Pesan</div>
     </div>
 
-    <!-- Script External -->
+    <!-- MENGHUBUNGKAN FILE JAVASCRIPT -->
     <script src="script.js"></script>
-  </body>
+</body>
 </html>
