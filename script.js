@@ -1,6 +1,4 @@
-// ==========================================
-// 1. LOGIKA HAMBURGER MENU MOBILE
-// ==========================================
+// LOGIKA HAMBURGER MENU MOBILE
 document.addEventListener("DOMContentLoaded", () => {
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
@@ -35,9 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// ==========================================
-// 2. SPA NAVIGATION & TOAST
-// ==========================================
+// SPA NAVIGATION & TOAST
 function showToast(message, isError = false) {
     const toast = document.getElementById("toast");
     const toastMsg = document.getElementById("toastMessage");
@@ -70,9 +66,7 @@ function showPage(pageId) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ==========================================
-// 3. LOGIKA DATA & DROPDOWN
-// ==========================================
+// LOGIKA DATA & DROPDOWN
 let dataPoints = [];
 let luasLahan = 1000;
 let kebutuhanAir = 10; 
@@ -106,9 +100,7 @@ document.getElementById('inputKebutuhan').addEventListener('input', (e) => {
     updateUI(); 
 });
 
-// ==========================================
-// 4. KONFIGURASI CHART.JS
-// ==========================================
+// KONFIGURASI CHART.JS
 const ctx = document.getElementById('flowChart').getContext('2d');
 let gradientFill = ctx.createLinearGradient(0, 0, 0, 400);
 gradientFill.addColorStop(0, 'rgba(17, 202, 160, 0.4)');
@@ -219,9 +211,7 @@ function updateUI() {
     updateTable();
 }
 
-// ==========================================
-// 6. VALIDASI INPUT & AKSI TOMBOL
-// ==========================================
+// VALIDASI INPUT & AKSI TOMBOL
 document.getElementById('formDebit').addEventListener('submit', (e) => {
     e.preventDefault();
     
@@ -255,8 +245,8 @@ document.getElementById('formDebit').addEventListener('submit', (e) => {
     
     updateUI();
     showToast(`Tercatat: Waktu ${time}m, Laju ${flow}L/m`, false);
+    inputWaktuElem.value = time + 10;
     
-    inputWaktuElem.value = dataPoints[dataPoints.length - 1].time + 10;
     inputDebitElem.value = '';
     inputDebitElem.focus();
 });
