@@ -34,9 +34,26 @@
                 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex gap-8 text-sm font-bold uppercase tracking-widest">
-                    <button onclick="showPage('beranda')" id="nav-beranda" class="nav-link active">Beranda</button>
-                    <button onclick="showPage('perhitungan')" id="nav-perhitungan" class="nav-link">Perhitungan</button>
-                    <button onclick="showPage('tentang')" id="nav-tentang" class="nav-link">Tim Kami</button>
+                    <button onclick="showPage('beranda')" id="nav-beranda" class="nav-link active">BERANDA</button>
+                    <button onclick="showPage('perhitungan')" id="nav-perhitungan" class="nav-link">PERHITUNGAN</button>
+                    <button onclick="showPage('tentang')" id="nav-tentang" class="nav-link">TENTANG KAMI</button>
+                </div>
+
+                <!-- Desktop Preferences -->
+                <div class="hidden md:flex items-center gap-3">
+                    <button id="themeToggleBtn" type="button" onclick="toggleDarkMode()" class="preference-icon-btn" aria-label="Aktifkan mode gelap" title="Mode Gelap">
+                        <i id="themeToggleIcon" class="fa-solid fa-moon"></i>
+                    </button>
+                    <div class="language-toggle" aria-label="Pilihan bahasa">
+                        <button id="lang-id" type="button" onclick="setLanguage('id')" class="language-btn active" aria-label="Bahasa Indonesia" title="Bahasa Indonesia">
+                            <span class="flag flag-id" aria-hidden="true"></span>
+                            <span>ID</span>
+                        </button>
+                        <button id="lang-en" type="button" onclick="setLanguage('en')" class="language-btn" aria-label="English" title="English">
+                            <span class="flag flag-us" aria-hidden="true"></span>
+                            <span>EN</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Mobile Menu Button -->
@@ -49,7 +66,23 @@
             <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-b border-emerald-100 flex-col py-4 px-6 shadow-2xl z-50 md:hidden transition-all duration-300">
                 <button onclick="showPage('beranda')" id="nav-mobile-beranda" class="nav-link-mobile active flex items-center gap-3 py-3.5 px-4 text-left font-bold uppercase text-sm tracking-widest rounded-xl mb-2"><i class="fa-solid fa-house w-5"></i> Beranda</button>
                 <button onclick="showPage('perhitungan')" id="nav-mobile-perhitungan" class="nav-link-mobile flex items-center gap-3 py-3.5 px-4 text-left font-bold uppercase text-sm tracking-widest rounded-xl mb-2"><i class="fa-solid fa-calculator w-5"></i> Perhitungan</button>
-                <button onclick="showPage('tentang')" id="nav-mobile-tentang" class="nav-link-mobile flex items-center gap-3 py-3.5 px-4 text-left font-bold uppercase text-sm tracking-widest rounded-xl"><i class="fa-solid fa-users w-5"></i> Tim Kelompok 3</button>
+                <button onclick="showPage('tentang')" id="nav-mobile-tentang" class="nav-link-mobile flex items-center gap-3 py-3.5 px-4 text-left font-bold uppercase text-sm tracking-widest rounded-xl"><i class="fa-solid fa-users w-5"></i> Tentang Kami</button>
+                <div class="mt-4 pt-4 border-t border-emerald-100 flex items-center justify-between gap-3">
+                    <button id="themeToggleBtnMobile" type="button" onclick="toggleDarkMode()" class="preference-text-btn" aria-label="Aktifkan mode gelap">
+                        <i id="themeToggleIconMobile" class="fa-solid fa-moon"></i>
+                        <span>Mode Gelap</span>
+                    </button>
+                    <div class="language-toggle">
+                        <button id="lang-mobile-id" type="button" onclick="setLanguage('id')" class="language-btn active" aria-label="Bahasa Indonesia" title="Bahasa Indonesia">
+                            <span class="flag flag-id" aria-hidden="true"></span>
+                            <span>ID</span>
+                        </button>
+                        <button id="lang-mobile-en" type="button" onclick="setLanguage('en')" class="language-btn" aria-label="English" title="English">
+                            <span class="flag flag-us" aria-hidden="true"></span>
+                            <span>EN</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -140,7 +173,7 @@
                             </div>
                             <div>
                                 <h3 class="text-lg font-black text-emerald-950 mb-2 tracking-tight">Pengertian</h3>
-                                <p class="text-slate-500 text-sm leading-relaxed">Smart Irrigation adalah aplikasi web simulasi irigasi yang memanfaatkan konsep <span class="font-bold text-emerald-700">Integral Tentu</span> — salah satu topik utama dalam kalkulus — untuk menghitung total volume air yang mengalir ke lahan pertanian.</p>
+                                <p class="text-slate-500 text-sm leading-relaxed">Smart Irrigation adalah aplikasi web simulasi irigasi yang memanfaatkan konsep <span class="font-bold text-emerald-700">Integral Tentu</span>, salah satu topik utama dalam kalkulus, untuk menghitung total volume air yang mengalir ke lahan pertanian.</p>
                                 <p class="text-slate-500 text-sm leading-relaxed mt-3">Alih-alih asumsi debit tetap, Smart Irrigation merekam debit air yang berubah setiap menit, lalu mengintegrasikannya secara numerik menggunakan <span class="font-bold text-emerald-700">metode trapesium</span> untuk menghasilkan angka yang jauh lebih presisi.</p>
                             </div>
                         </div>
@@ -371,10 +404,10 @@
                         </div>
                         
                         <div class="grid grid-cols-2 md:flex gap-3 w-full md:w-auto">
-                            <button onclick="resetData()" class="justify-center px-5 py-3 md:py-2.5 rounded-xl text-xs font-bold text-emerald-700 bg-white/80 backdrop-blur-sm border border-emerald-200 hover:bg-white hover:text-red-500 transition-all shadow-[0_4px_15px_rgba(16,185,129,0.05)] hover:shadow-md flex items-center gap-2 active:scale-95">
+                            <button onclick="resetData()" class="tooltip-target justify-center px-5 py-3 md:py-2.5 rounded-xl text-xs font-bold text-emerald-700 bg-white/80 backdrop-blur-sm border border-emerald-200 hover:bg-white hover:text-red-500 transition-all shadow-[0_4px_15px_rgba(16,185,129,0.05)] hover:shadow-md flex items-center gap-2 active:scale-95" data-tooltip="Reset semua data simulasi">
                                 <i class="fa-solid fa-rotate-right"></i> Reset
                             </button>
-                            <button onclick="downloadExcel()" class="justify-center bg-emerald-900 text-white px-5 py-3 md:py-2.5 rounded-xl text-xs font-bold hover:bg-emerald-950 transition-all shadow-[0_4px_15px_rgba(16,185,129,0.2)] hover:shadow-lg flex items-center gap-2 md:hover:-translate-y-0.5 active:scale-95">
+                            <button onclick="downloadExcel()" class="tooltip-target justify-center bg-emerald-900 text-white px-5 py-3 md:py-2.5 rounded-xl text-xs font-bold hover:bg-emerald-950 transition-all shadow-[0_4px_15px_rgba(16,185,129,0.2)] hover:shadow-lg flex items-center gap-2 md:hover:-translate-y-0.5 active:scale-95" data-tooltip="Export to .csv file">
                                 <i class="fa-solid fa-file-csv text-[#11caa0] text-base"></i> Export
                             </button>
                         </div>
@@ -411,16 +444,48 @@
                                                 <i class="fa-solid fa-chevron-down text-xs"></i>
                                             </div>
                                         </div>
+                                        <div id="cropPreview" class="crop-preview mt-3" aria-live="polite">
+                                            <div id="cropPreviewIcon" class="crop-preview-icon" aria-hidden="true">🌾</div>
+                                            <div class="min-w-0 flex-1">
+                                                <p id="cropPreviewEyebrow" class="crop-preview-eyebrow">Tanaman Terpilih</p>
+                                                <h4 id="cropPreviewName" class="crop-preview-name">Padi</h4>
+                                                <p id="cropPreviewHint" class="crop-preview-hint">Kebutuhan air tinggi untuk fase pertumbuhan intensif.</p>
+                                            </div>
+                                            <div class="crop-preview-need">
+                                                <span id="cropPreviewNeed">10</span>
+                                                <small>L/m²</small>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="grid grid-cols-2 gap-3">
                                         <div>
                                             <label class="block text-xs font-bold text-emerald-700/70 mb-2 uppercase">Luas (m²)</label>
-                                            <input type="number" id="inputLuas" value="1000" min="0" class="w-full px-4 py-3.5 bg-white border border-emerald-200 rounded-xl focus:ring-2 focus:ring-[#11caa0]/50 focus:border-[#11caa0] outline-none font-bold text-sm text-emerald-900 transition-all shadow-sm">
+                                            <div class="need-input-wrap area-input-wrap">
+                                                <input type="number" id="inputLuas" value="1000" min="0" step="1" class="need-input-field area-input-field w-full px-4 py-3.5 border border-emerald-200 rounded-xl focus:ring-2 focus:ring-[#11caa0]/50 focus:border-[#11caa0] outline-none font-bold text-sm bg-emerald-50/50 text-emerald-700 transition-all shadow-inner">
+                                                <span class="need-unit">m²</span>
+                                                <div class="need-stepper" aria-hidden="false">
+                                                    <button id="decreaseLuas" type="button" class="need-stepper-btn" aria-label="Kurangi luas lahan" title="Kurangi luas lahan">
+                                                        <i class="fa-solid fa-minus"></i>
+                                                    </button>
+                                                    <button id="increaseLuas" type="button" class="need-stepper-btn" aria-label="Tambah luas lahan" title="Tambah luas lahan">
+                                                        <i class="fa-solid fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div>
                                             <label class="block text-xs font-bold text-emerald-700/70 mb-2 uppercase">Kebutuhan</label>
-                                            <div class="relative">
-                                                <input type="number" id="inputKebutuhan" value="10" min="0" readonly class="w-full px-4 py-3.5 border border-emerald-200 rounded-xl outline-none font-bold text-sm bg-emerald-50/50 text-emerald-700 shadow-inner">
+                                            <div class="need-input-wrap">
+                                                <input type="number" id="inputKebutuhan" value="10" min="0" step="1" readonly class="need-input-field w-full px-4 py-3.5 border border-emerald-200 rounded-xl outline-none font-bold text-sm bg-emerald-50/50 text-emerald-700 shadow-inner">
+                                                <span class="need-unit">L/m²</span>
+                                                <div class="need-stepper" aria-hidden="false">
+                                                    <button id="decreaseKebutuhan" type="button" class="need-stepper-btn requirement-stepper-btn" aria-label="Kurangi kebutuhan air" title="Kurangi kebutuhan air">
+                                                        <i class="fa-solid fa-minus"></i>
+                                                    </button>
+                                                    <button id="increaseKebutuhan" type="button" class="need-stepper-btn requirement-stepper-btn" aria-label="Tambah kebutuhan air" title="Tambah kebutuhan air">
+                                                        <i class="fa-solid fa-plus"></i>
+                                                    </button>
+                                                </div>
                                                 <span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-emerald-500">L/m²</span>
                                             </div>
                                         </div>
@@ -429,7 +494,7 @@
                             </div>
 
                             <!-- Box Sensor -->
-                            <form id="formDebit" class="bg-[#022c22] p-6 md:p-7 rounded-[24px] shadow-[0_20px_40px_rgba(16,185,129,0.2)] border border-[#064e3b] text-white relative overflow-hidden group">
+                            <form id="formDebit" class="bg-white/90 backdrop-blur-md p-6 md:p-7 rounded-[24px] shadow-[0_8px_30px_rgb(16,185,129,0.06)] border border-emerald-100 text-emerald-950 relative overflow-hidden group hover:shadow-[0_8px_30px_rgb(16,185,129,0.1)] transition-shadow">
                                 <div class="absolute -right-10 -top-10 w-40 h-40 bg-gradient-to-br from-[#11caa0] to-[#0ea5e9] rounded-full mix-blend-overlay filter blur-[50px] opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
                                 <h3 class="text-xs font-bold text-[#11caa0] uppercase tracking-widest mb-6 relative z-10 flex items-center gap-2">
                                     <div class="p-1.5 bg-[#11caa0]/10 text-[#11caa0] rounded-lg"><i class="fa-solid fa-stopwatch"></i></div>
@@ -437,12 +502,34 @@
                                 </h3>
                                 <div class="grid grid-cols-2 gap-4 mb-6 relative z-10">
                                     <div>
-                                        <label class="block text-xs text-emerald-200/70 font-bold mb-2 uppercase">Waktu <span class="text-emerald-500/50 normal-case">(Mnt)</span></label>
-                                        <input type="number" id="inputWaktu" min="0" step="10" class="w-full px-4 py-3.5 bg-white/5 border border-emerald-500/20 rounded-xl outline-none font-mono text-base focus:border-[#11caa0] focus:bg-white/10 transition-colors shadow-inner" required>
+                                        <label class="block text-xs text-emerald-700/70 font-bold mb-2 uppercase">Waktu <span class="text-emerald-500/70 normal-case">(Mnt)</span></label>
+                                        <div class="need-input-wrap sensor-input-wrap">
+                                            <input type="number" id="inputWaktu" min="0" step="10" class="need-input-field sensor-input-field w-full px-4 py-3.5 bg-emerald-50/50 border border-emerald-200 rounded-xl outline-none font-mono text-base text-emerald-900 focus:border-[#11caa0] focus:bg-white transition-colors shadow-inner" required>
+                                            <span class="need-unit">mnt</span>
+                                            <div class="need-stepper" aria-hidden="false">
+                                                <button id="decreaseWaktu" type="button" class="need-stepper-btn sensor-stepper-btn" aria-label="Kurangi waktu" title="Kurangi waktu">
+                                                    <i class="fa-solid fa-minus"></i>
+                                                </button>
+                                                <button id="increaseWaktu" type="button" class="need-stepper-btn sensor-stepper-btn" aria-label="Tambah waktu" title="Tambah waktu">
+                                                    <i class="fa-solid fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div>
-                                        <label class="block text-xs text-emerald-200/70 font-bold mb-2 uppercase">Debit <span class="text-emerald-500/50 normal-case">(L/m)</span></label>
-                                        <input type="number" id="inputDebit" min="0" class="w-full px-4 py-3.5 bg-white/5 border border-emerald-500/20 rounded-xl outline-none font-mono text-base focus:border-[#11caa0] focus:bg-white/10 transition-colors shadow-inner" placeholder="0" required>
+                                        <label class="block text-xs text-emerald-700/70 font-bold mb-2 uppercase">Debit <span class="text-emerald-500/70 normal-case">(L/m)</span></label>
+                                        <div class="need-input-wrap sensor-input-wrap">
+                                            <input type="number" id="inputDebit" min="0" step="1" class="need-input-field sensor-input-field w-full px-4 py-3.5 bg-emerald-50/50 border border-emerald-200 rounded-xl outline-none font-mono text-base text-emerald-900 focus:border-[#11caa0] focus:bg-white transition-colors shadow-inner" placeholder="0" required>
+                                            <span class="need-unit">L/m</span>
+                                            <div class="need-stepper" aria-hidden="false">
+                                                <button id="decreaseDebit" type="button" class="need-stepper-btn sensor-stepper-btn" aria-label="Kurangi debit" title="Kurangi debit">
+                                                    <i class="fa-solid fa-minus"></i>
+                                                </button>
+                                                <button id="increaseDebit" type="button" class="need-stepper-btn sensor-stepper-btn" aria-label="Tambah debit" title="Tambah debit">
+                                                    <i class="fa-solid fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <button type="submit" class="w-full py-4 bg-gradient-to-r from-[#11caa0] to-[#059669] text-white font-black rounded-xl hover:shadow-[0_0_20px_rgba(17,202,160,0.5)] transition-all uppercase tracking-widest text-xs relative z-10 active:scale-95">Simpan & Kalkulasi</button>
@@ -484,12 +571,12 @@
 
                             <!-- Area Chart -->
                             <div class="bg-white/90 backdrop-blur-md p-5 md:p-8 rounded-[24px] shadow-[0_8px_30px_rgb(16,185,129,0.04)] border border-emerald-100 h-[280px] sm:h-[350px] md:h-[400px] relative w-full group">
-                                <div class="absolute top-5 md:top-8 right-5 md:right-8 flex items-center gap-2 z-10 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200">
-                                    <span class="relative flex h-2 w-2">
+                                <div class="absolute top-3 md:top-8 right-3 md:right-8 flex items-center gap-1 md:gap-2 z-10 bg-emerald-50 px-2 md:px-3 py-1 md:py-1.5 rounded-full border border-emerald-200">
+                                    <span class="relative flex h-1.5 w-1.5 md:h-2 md:w-2">
                                       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#11caa0] opacity-75"></span>
-                                      <span class="relative inline-flex rounded-full h-2 w-2 bg-[#11caa0]"></span>
+                                      <span class="relative inline-flex rounded-full h-1.5 w-1.5 md:h-2 md:w-2 bg-[#11caa0]"></span>
                                     </span>
-                                    <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Live Area</span>
+                                    <span class="text-[7px] sm:text-[8px] md:text-[10px] font-bold text-emerald-600 uppercase tracking-[0.06em] md:tracking-widest">Live Area</span>
                                 </div>
                                 <canvas id="flowChart"></canvas>
                             </div>
@@ -537,9 +624,9 @@
             <!-- Background Hijau Transparan dengan Motif Air -->
             <div class="min-h-screen py-16 md:py-20 bg-[#ecfdf5] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNDQnIGhlaWdodD0nNzInIHZpZXdCb3g9JzAgMCAxNDQgNzInPjxwYXRoIGZpbGwtb3BhY2l0eT0nMC41JyBkPSJNMCw3MkwwLDM2QzI0LDM2IDI0LDAgNDgsMEM3MiwwIDcyLDM2IDk2LDM2QzEyMCwzNiAxMjAsMCAxNDQsMEwxNDQsNzJaIiBmaWxsPSIjMTBiOTgxIiBvcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')] bg-repeat relative overflow-hidden">
                 
-                <div class="max-w-6xl mx-auto px-5 sm:px-6 text-center relative z-10">
+                <div class="max-w-6xl mx-auto px-5 sm:px-6 relative z-10">
                     
-                    <div class="mb-14 md:mb-20">
+                    <div class="mb-14 md:mb-20 text-center">
                         <span class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-white/80 text-emerald-700 text-xs font-bold tracking-widest uppercase mb-4 shadow-sm border border-emerald-200">
                             <i class="fa-solid fa-graduation-cap text-[#11caa0]"></i> Informatika UNSIL 2025
                         </span>
@@ -550,27 +637,151 @@
                         <!-- Card Anggota dengan Hover Effect Premium -->
                         <div class="bg-white/90 backdrop-blur-sm p-8 rounded-[32px] shadow-[0_10px_30px_rgba(16,185,129,0.05)] border border-emerald-100 hover:shadow-[0_20px_40px_rgba(17,202,160,0.15)] transform md:hover:-translate-y-2 transition-all duration-300 border-b-[4px] border-b-[#0ea5e9] flex flex-col items-center group">
                             <h4 class="text-lg lg:text-xl font-black text-emerald-900">FASHA OCTA RAMDANI</h4>
-                            <p class="text-xs text-[#0ea5e9] font-bold mt-2 uppercase tracking-widest bg-[#0ea5e9]/10 px-3 py-1 rounded-md">076</p>
+                            <p class="text-xs text-[#0ea5e9] font-bold mt-2 uppercase tracking-widest bg-[#0ea5e9]/10 px-3 py-1 rounded-md">257006111076</p>
                         </div>
                         <div class="bg-white/90 backdrop-blur-sm p-8 rounded-[32px] shadow-[0_10px_30px_rgba(16,185,129,0.05)] border border-emerald-100 hover:shadow-[0_20px_40px_rgba(17,202,160,0.15)] transform md:hover:-translate-y-2 transition-all duration-300 border-b-[4px] border-b-[#11caa0] flex flex-col items-center group">
                             <h4 class="text-lg lg:text-xl font-black text-emerald-900">BIMBIM DANY SAPUTRA</h4>
-                            <p class="text-xs text-[#11caa0] font-bold mt-2 uppercase tracking-widest bg-[#11caa0]/10 px-3 py-1 rounded-md">077</p>
+                            <p class="text-xs text-[#11caa0] font-bold mt-2 uppercase tracking-widest bg-[#11caa0]/10 px-3 py-1 rounded-md">257006111077</p>
                         </div>
                         <div class="bg-white/90 backdrop-blur-sm p-8 rounded-[32px] shadow-[0_10px_30px_rgba(16,185,129,0.05)] border border-emerald-100 hover:shadow-[0_20px_40px_rgba(17,202,160,0.15)] transform md:hover:-translate-y-2 transition-all duration-300 border-b-[4px] border-b-[#0ea5e9] flex flex-col items-center group">
                             <h4 class="text-lg lg:text-xl font-black text-emerald-900">NAZWA NURUL AULIA</h4>
-                            <p class="text-xs text-[#0ea5e9] font-bold mt-2 uppercase tracking-widest bg-[#0ea5e9]/10 px-3 py-1 rounded-md">094</p>
+                            <p class="text-xs text-[#0ea5e9] font-bold mt-2 uppercase tracking-widest bg-[#0ea5e9]/10 px-3 py-1 rounded-md">257006111094</p>
                         </div>
                         <div class="bg-white/90 backdrop-blur-sm p-8 rounded-[32px] shadow-[0_10px_30px_rgba(16,185,129,0.05)] border border-emerald-100 hover:shadow-[0_20px_40px_rgba(17,202,160,0.15)] transform md:hover:-translate-y-2 transition-all duration-300 border-b-[4px] border-b-[#11caa0] flex flex-col items-center group">
                             <h4 class="text-lg lg:text-xl font-black text-emerald-900">SYAHRIL MUSTHOFA</h4>
-                            <p class="text-xs text-[#11caa0] font-bold mt-2 uppercase tracking-widest bg-[#11caa0]/10 px-3 py-1 rounded-md">099</p>
+                            <p class="text-xs text-[#11caa0] font-bold mt-2 uppercase tracking-widest bg-[#11caa0]/10 px-3 py-1 rounded-md">257006111099</p>
                         </div>
                         <div class="bg-white/90 backdrop-blur-sm p-8 rounded-[32px] shadow-[0_10px_30px_rgba(16,185,129,0.05)] border border-emerald-100 hover:shadow-[0_20px_40px_rgba(17,202,160,0.15)] transform md:hover:-translate-y-2 transition-all duration-300 border-b-[4px] border-b-[#0ea5e9] flex flex-col items-center group">
                             <h4 class="text-lg lg:text-xl font-black text-emerald-900">REVA IMEILDA</h4>
-                            <p class="text-xs text-[#0ea5e9] font-bold mt-2 uppercase tracking-widest bg-[#0ea5e9]/10 px-3 py-1 rounded-md">108</p>
+                            <p class="text-xs text-[#0ea5e9] font-bold mt-2 uppercase tracking-widest bg-[#0ea5e9]/10 px-3 py-1 rounded-md">257006111108</p>
                         </div>
                         <div class="bg-white/90 backdrop-blur-sm p-8 rounded-[32px] shadow-[0_10px_30px_rgba(16,185,129,0.05)] border border-emerald-100 hover:shadow-[0_20px_40px_rgba(17,202,160,0.15)] transform md:hover:-translate-y-2 transition-all duration-300 border-b-[4px] border-b-[#11caa0] flex flex-col items-center group">
                             <h4 class="text-lg lg:text-xl font-black text-emerald-900">DZULFIKAR ALHAMRI</h4>
-                            <p class="text-xs text-[#11caa0] font-bold mt-2 uppercase tracking-widest bg-[#11caa0]/10 px-3 py-1 rounded-md">115</p>
+                            <p class="text-xs text-[#11caa0] font-bold mt-2 uppercase tracking-widest bg-[#11caa0]/10 px-3 py-1 rounded-md">257006111115</p>
+                        </div>
+                    </div>
+
+                    <div id="supportSectionGrid" class="support-grid mt-14 md:mt-20 items-start">
+                        <div class="bg-white/95 backdrop-blur-sm p-6 md:p-8 rounded-[28px] shadow-[0_12px_34px_rgba(16,185,129,0.08)] border border-emerald-100">
+                            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+                                <div>
+                                    <span class="inline-flex items-center gap-2 py-1.5 px-3 rounded-full bg-[#022c22] text-emerald-300 text-[11px] font-black tracking-widest uppercase border border-emerald-800">
+                                        <i class="fa-solid fa-headset text-[#11caa0]"></i> Contact Support
+                                    </span>
+                                    <h3 class="mt-4 text-2xl md:text-3xl font-black text-emerald-950 tracking-tight">Laporkan Kendala Website</h3>
+                                    <p class="mt-2 text-sm text-slate-500 leading-relaxed max-w-2xl">Pilih jenis laporan yang paling sesuai, ceritakan detailnya, lalu kirimkan ke email support agar tim pengembang bisa menindaklanjuti.</p>
+                                </div>
+                                <div class="shrink-0 rounded-2xl bg-[#022c22] text-emerald-100 px-4 py-3 border border-emerald-800 text-center">
+                                    <p class="text-[10px] uppercase tracking-widest text-emerald-300 font-black">Email Support</p>
+                                    <a id="supportEmailLink" href="mailto:yorutoasa07@gmail.com" class="block text-xs sm:text-sm font-bold text-white break-all hover:text-[#11caa0] transition-colors">yorutoasa07@gmail.com</a>
+                                </div>
+                            </div>
+
+                            <div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-3 mb-6">
+                                <button type="button" onclick="selectSupportType('Bug')" class="support-type-card tooltip-target group text-left rounded-2xl border border-red-100 bg-red-50/70 p-4 hover:border-red-200 hover:bg-red-50 transition-all" data-tooltip="Pilih Bug jika fitur tidak berjalan sesuai fungsi">
+                                    <span class="w-11 h-11 rounded-xl bg-red-500 text-white flex items-center justify-center shadow-[0_8px_18px_rgba(239,68,68,0.18)] mb-3">
+                                        <i class="fa-solid fa-bug"></i>
+                                    </span>
+                                    <h4 class="text-sm font-black text-red-900">Bug</h4>
+                                    <p class="mt-1 text-xs leading-relaxed text-red-900/60">Laporan saat tombol, form, hasil kalkulasi, atau fitur website tidak berjalan sesuai fungsi.</p>
+                                </button>
+                                <button type="button" onclick="selectSupportType('Glitch')" class="support-type-card tooltip-target group text-left rounded-2xl border border-sky-100 bg-sky-50/70 p-4 hover:border-sky-200 hover:bg-sky-50 transition-all" data-tooltip="Pilih Glitch untuk masalah tampilan atau animasi">
+                                    <span class="w-11 h-11 rounded-xl bg-[#0ea5e9] text-white flex items-center justify-center shadow-[0_8px_18px_rgba(14,165,233,0.18)] mb-3">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                    </span>
+                                    <h4 class="text-sm font-black text-sky-900">Glitch</h4>
+                                    <p class="mt-1 text-xs leading-relaxed text-sky-900/60">Laporan untuk tampilan yang bergeser, animasi tersendat, grafik aneh, atau UI yang terasa tidak stabil.</p>
+                                </button>
+                                <button type="button" onclick="selectSupportType('Error')" class="support-type-card tooltip-target group text-left rounded-2xl border border-amber-100 bg-amber-50/70 p-4 hover:border-amber-200 hover:bg-amber-50 transition-all" data-tooltip="Pilih Error jika proses gagal atau muncul pesan error">
+                                    <span class="w-11 h-11 rounded-xl bg-amber-500 text-white flex items-center justify-center shadow-[0_8px_18px_rgba(245,158,11,0.18)] mb-3">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                    </span>
+                                    <h4 class="text-sm font-black text-amber-900">Error</h4>
+                                    <p class="mt-1 text-xs leading-relaxed text-amber-900/60">Laporan saat muncul pesan error, halaman tidak bisa dibuka, data gagal tersimpan, atau proses berhenti.</p>
+                                </button>
+                                <button type="button" onclick="selectSupportType('Saran')" class="support-type-card tooltip-target group text-left rounded-2xl border border-emerald-100 bg-emerald-50/70 p-4 hover:border-emerald-200 hover:bg-emerald-50 transition-all" data-tooltip="Pilih Saran untuk ide fitur atau perbaikan alur">
+                                    <span class="w-11 h-11 rounded-xl bg-[#11caa0] text-white flex items-center justify-center shadow-[0_8px_18px_rgba(17,202,160,0.18)] mb-3">
+                                        <i class="fa-solid fa-lightbulb"></i>
+                                    </span>
+                                    <h4 class="text-sm font-black text-[#047857] group-hover:text-[#065f46] transition-colors">Saran</h4>
+                                    <p class="mt-1 text-xs leading-relaxed text-emerald-900/60">Masukan untuk fitur baru, perbaikan alur, penyajian data, atau ide agar website lebih nyaman dipakai.</p>
+                                </button>
+                            </div>
+
+                            <form id="supportForm" action="https://formspree.io/f/mvzloyra" method="POST" class="grid sm:grid-cols-2 gap-4">
+                                <div class="support-honeypot" aria-hidden="true">
+                                    <label for="reportWebsite">Website</label>
+                                    <input id="reportWebsite" name="_gotcha" type="text" tabindex="-1" autocomplete="off">
+                                </div>
+                                <div>
+                                    <label for="reportName" class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Nama Pelapor</label>
+                                    <input id="reportName" name="nama_pelapor" type="text" required minlength="3" maxlength="80" data-label="Nama pelapor" placeholder="Nama kamu" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#11caa0]/30 focus:border-[#11caa0] transition-all">
+                                </div>
+                                <div>
+                                    <label for="reportContact" class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Kontak Balasan</label>
+                                    <input id="reportContact" name="email" type="email" required minlength="6" maxlength="120" data-label="Kontak balasan" placeholder="nama@example.com" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#11caa0]/30 focus:border-[#11caa0] transition-all">
+                                </div>
+                                <div>
+                                    <label for="reportType" class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Jenis Laporan</label>
+                                    <select id="reportType" name="jenis_laporan" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#11caa0]/30 focus:border-[#11caa0] transition-all">
+                                        <option value="Bug">Bug</option>
+                                        <option value="Glitch">Glitch</option>
+                                        <option value="Error">Error</option>
+                                        <option value="Saran">Saran</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="reportPage" class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Halaman/Fitur</label>
+                                    <input id="reportPage" name="halaman_fitur" type="text" required minlength="3" maxlength="120" data-label="Halaman atau fitur" placeholder="Contoh: Perhitungan" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#11caa0]/30 focus:border-[#11caa0] transition-all">
+                                </div>
+                                <div class="sm:col-span-2">
+                                    <label for="reportMessage" class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Detail Laporan</label>
+                                    <textarea id="reportMessage" name="detail_laporan" required minlength="25" maxlength="1800" data-label="Detail laporan" rows="5" placeholder="Jelaskan kendala atau saran sejelas mungkin..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#11caa0]/30 focus:border-[#11caa0] transition-all resize-none"></textarea>
+                                </div>
+                                <div class="sm:col-span-2">
+                                    <button id="submitSupportBtn" type="submit" class="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#11caa0] to-[#059669] text-white rounded-2xl px-5 py-3 font-black text-sm uppercase tracking-widest shadow-[0_10px_24px_rgba(17,202,160,0.22)] hover:shadow-[0_14px_32px_rgba(17,202,160,0.32)] transition-all">
+                                        <i class="fa-solid fa-envelope"></i> Kirim via Email
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div id="developerSupportPanel" class="hidden bg-[#022c22] text-white p-6 md:p-8 rounded-[28px] shadow-[0_16px_38px_rgba(2,44,34,0.18)] border border-emerald-800">
+                            <div class="flex items-start justify-between gap-4 mb-5">
+                                <div>
+                                    <span class="inline-flex items-center gap-2 py-1 px-3 rounded-full bg-white/10 text-emerald-200 text-[10px] font-black tracking-widest uppercase border border-white/10">
+                                        <i class="fa-solid fa-code"></i> Mode Developer
+                                    </span>
+                                    <h3 class="mt-4 text-xl md:text-2xl font-black tracking-tight">Tampungan Web</h3>
+                                    <p class="mt-2 text-xs text-emerald-100/70 leading-relaxed">Data disimpan di localStorage browser ini. Cocok untuk uji coba tanpa backend.</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-[#11caa0] text-xl">
+                                    <i class="fa-solid fa-box-archive"></i>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3 mb-5">
+                                <div class="rounded-2xl bg-white/10 border border-white/10 p-4">
+                                    <p class="text-[10px] uppercase tracking-widest text-emerald-200 font-black">Total</p>
+                                    <p id="supportReportCount" class="text-3xl font-black mt-1">0</p>
+                                </div>
+                                <div class="rounded-2xl bg-white/10 border border-white/10 p-4">
+                                    <p class="text-[10px] uppercase tracking-widest text-emerald-200 font-black">Status</p>
+                                    <p class="text-sm font-black mt-2 text-[#11caa0]">Aktif</p>
+                                </div>
+                            </div>
+
+                            <div id="supportReportList" class="max-h-72 overflow-y-auto custom-scrollbar space-y-3 pr-1"></div>
+                            <p id="supportReportEmpty" class="text-center text-emerald-100/50 text-xs font-bold py-8 border border-dashed border-white/10 rounded-2xl">Belum ada laporan tersimpan.</p>
+
+                            <div class="grid grid-cols-2 gap-3 mt-5">
+                                <button onclick="exportSupportReports()" class="tooltip-target inline-flex items-center justify-center gap-2 rounded-2xl bg-white text-emerald-950 px-4 py-3 text-xs font-black uppercase tracking-widest hover:bg-emerald-50 transition-colors" data-tooltip="Export laporan ke file .json">
+                                    <i class="fa-solid fa-file-export"></i> Ekspor
+                                </button>
+                                <button onclick="clearSupportReports()" class="tooltip-target inline-flex items-center justify-center gap-2 rounded-2xl bg-red-500/15 text-red-100 border border-red-400/30 px-4 py-3 text-xs font-black uppercase tracking-widest hover:bg-red-500/25 transition-colors" data-tooltip="Hapus laporan yang tersimpan di browser">
+                                    <i class="fa-solid fa-trash"></i> Hapus
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
