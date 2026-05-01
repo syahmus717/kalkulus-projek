@@ -200,15 +200,55 @@ function updateUI() {
     const target = luasLahan * kebutuhanAir;
     
     document.getElementById('cardVolume').innerText = current.toLocaleString('id-ID');
+    
     let percent = target > 0 ? (current / target) * 100 : 0;
-    document.getElementById('cardPercent').innerText = `${percent.toFixed(1)}%`;
-    document.getElementById('progressBar').style.width = `${Math.min(percent, 100)}%`;
+    
+    // VALIDASI: Kunci persentase maksimal di 100%
+    let displayPercent = Math.min(percent, 100); 
+    document.getElementById('cardPercent').innerText = `${displayPercent.toFixed(1)}%`;
+    document.getElementById('progressBar').style.width = `${displayPercent}%`;
     
     flowChart.data.labels = dataPoints.map(d => `${d.time}m`);
     flowChart.data.datasets[0].data = dataPoints.map(d => d.flow);
     flowChart.update();
 
     updateTable();
+
+    // ==========================================
+    // KUNCI FORM JIKA SUDAH MENCAPAI 100%
+    // ==========================================
+    const isFull = current >= target && target > 0;
+    const inputWaktuElem = document.getElementById('inputWaktu');
+    const inputDebitElem = document.getElementById('inputDebit');
+    const submitBtn = document.querySelector('#formDebit button[type="submit"]');
+
+    if (isFull) {
+        // Matikan fungsi klik dan ketik
+        inputWaktuElem.disabled = true;
+        inputDebitElem.disabled = true;
+        submitBtn.disabled = true;
+        
+        // Berikan efek visual buram (transparan) & kursor dilarang
+        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        inputWaktuElem.classList.add('opacity-50', 'cursor-not-allowed');
+        inputDebitElem.classList.add('opacity-50', 'cursor-not-allowed');
+        
+        // Ubah teks tombol
+        submitBtn.innerText = "Irigasi Selesai (100%)";
+    } else {
+        // Nyalakan kembali jika di-reset atau target lahan diperbesar
+        inputWaktuElem.disabled = false;
+        inputDebitElem.disabled = false;
+        submitBtn.disabled = false;
+        
+        // Hapus efek buram
+        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        inputWaktuElem.classList.remove('opacity-50', 'cursor-not-allowed');
+        inputDebitElem.classList.remove('opacity-50', 'cursor-not-allowed');
+        
+        // Kembalikan teks tombol
+        submitBtn.innerText = "Simpan & Kalkulasi";
+    }
 }
 
 document.getElementById('formDebit').addEventListener('submit', (e) => {
@@ -281,7 +321,7 @@ function downloadExcel() {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.setAttribute('href', url);
-    a.setAttribute('download', 'Laporan_Validasi_HydroLogic.csv');
+    a.setAttribute('download', 'Laporan_Validasi_Smart_Irrigation.csv');
     a.click();
     showToast("Tabel Laporan Diunduh", false);
 }
