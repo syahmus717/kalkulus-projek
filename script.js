@@ -1165,7 +1165,7 @@ function downloadExcel() {
 }
 
 // CONTACT SUPPORT & MODE DEVELOPER
-const SUPPORT_EMAIL = "yorutoasa07@gmail.com";
+const SUPPORT_EMAIL = "support.smartirrigation@gmail.com";
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xgodebnq";
 const SUPPORT_STORAGE_KEY = "smartIrrigationSupportReports";
 const SUPPORT_LAST_SENT_KEY = "smartIrrigationSupportLastSentAt";
