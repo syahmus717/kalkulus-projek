@@ -1,4 +1,6 @@
-// LOGIKA HAMBURGER MENU MOBILE
+// ==========================================
+// 1. LOGIKA HAMBURGER MENU MOBILE
+// ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
@@ -12,13 +14,17 @@ document.addEventListener("DOMContentLoaded", () => {
         if (isMobileMenuOpen) {
             mobileMenu.classList.remove('hidden');
             mobileMenu.classList.add('flex');
-            menuIcon.classList.remove('fa-bars');
-            menuIcon.classList.add('fa-xmark');
+            if (menuIcon) {
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-xmark');
+            }
         } else {
             mobileMenu.classList.add('hidden');
             mobileMenu.classList.remove('flex');
-            menuIcon.classList.remove('fa-xmark');
-            menuIcon.classList.add('fa-bars');
+            if (menuIcon) {
+                menuIcon.classList.remove('fa-xmark');
+                menuIcon.classList.add('fa-bars');
+            }
         }
     }
 
@@ -33,10 +39,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// SPA NAVIGATION & TOAST
+// ==========================================
+// 2. SPA NAVIGATION & TOAST
+// ==========================================
 function showToast(message, isError = false) {
     const toast = document.getElementById("toast");
     const toastMsg = document.getElementById("toastMessage");
+    if (!toast || !toastMsg) return;
+
     toastMsg.innerText = message;
     
     if(isError) {
@@ -51,14 +61,25 @@ function showToast(message, isError = false) {
 }
 
 function showPage(pageId) {
-    document.querySelectorAll('.page-wrapper').forEach(page => { page.classList.remove('active-page'); });
-    const targetPage = document.getElementById('page-' + pageId);
-    if (targetPage) targetPage.classList.add('active-page');
+    // Sembunyikan semua halaman
+    document.querySelectorAll('.page-wrapper').forEach(page => { 
+        page.classList.remove('active-page');
+        page.classList.add('hidden');
+    });
     
+    // Tampilkan halaman tujuan
+    const targetPage = document.getElementById('page-' + pageId);
+    if (targetPage) {
+        targetPage.classList.remove('hidden');
+        targetPage.classList.add('active-page');
+    }
+    
+    // Update status nav link Desktop
     document.querySelectorAll('.nav-link').forEach(link => { link.classList.remove('active'); });
     const activeNav = document.getElementById('nav-' + pageId);
     if (activeNav) activeNav.classList.add('active');
 
+    // Update status nav link Mobile
     document.querySelectorAll('.nav-link-mobile').forEach(link => { link.classList.remove('active', 'text-[#11caa0]'); });
     const activeMobileNav = document.getElementById('nav-mobile-' + pageId);
     if (activeMobileNav) activeMobileNav.classList.add('active', 'text-[#11caa0]');
@@ -66,84 +87,106 @@ function showPage(pageId) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// LOGIKA DATA & DROPDOWN
+// ==========================================
+// 3. LOGIKA DATA & DROPDOWN
+// ==========================================
 let dataPoints = [];
 let luasLahan = 1000;
 let kebutuhanAir = 10; 
 
-document.getElementById('inputLuas').addEventListener('input', (e) => { 
-    if(e.target.value < 0) e.target.value = 0;
-    luasLahan = Number(e.target.value); 
-    updateUI(); 
-});
+const inputLuas = document.getElementById('inputLuas');
+if (inputLuas) {
+    inputLuas.addEventListener('input', (e) => { 
+        if(e.target.value < 0) e.target.value = 0;
+        luasLahan = Number(e.target.value); 
+        updateUI(); 
+    });
+}
 
-document.getElementById('selectTanaman').addEventListener('change', (e) => {
-    const val = e.target.value;
-    const inputKebutuhan = document.getElementById('inputKebutuhan');
-    if (val === 'custom') {
-        inputKebutuhan.readOnly = false;
-        inputKebutuhan.classList.remove('bg-slate-50', 'text-slate-500');
-        inputKebutuhan.focus();
-    } else {
-        inputKebutuhan.value = val;
-        inputKebutuhan.readOnly = true;
-        inputKebutuhan.classList.add('bg-slate-50', 'text-slate-500');
-        kebutuhanAir = Number(val);
-        updateUI();
-    }
-    showToast("Konfigurasi diperbarui", false);
-});
+const selectTanaman = document.getElementById('selectTanaman');
+if (selectTanaman) {
+    selectTanaman.addEventListener('change', (e) => {
+        const val = e.target.value;
+        const inputKebutuhan = document.getElementById('inputKebutuhan');
+        if (!inputKebutuhan) return;
 
-document.getElementById('inputKebutuhan').addEventListener('input', (e) => { 
-    if(e.target.value < 0) e.target.value = 0;
-    kebutuhanAir = Number(e.target.value); 
-    updateUI(); 
-});
-
-// KONFIGURASI CHART.JS
-const ctx = document.getElementById('flowChart').getContext('2d');
-let gradientFill = ctx.createLinearGradient(0, 0, 0, 400);
-gradientFill.addColorStop(0, 'rgba(17, 202, 160, 0.4)');
-gradientFill.addColorStop(1, 'rgba(17, 202, 160, 0.0)');
-
-const isMobile = window.innerWidth < 768;
-
-const flowChart = new Chart(ctx, {
-    type: 'line',
-    data: { 
-        labels: [], 
-        datasets: [{ 
-            label: 'Laju Debit (L/mnt)', 
-            data: [], 
-            borderColor: '#11caa0', 
-            fill: true, 
-            backgroundColor: gradientFill, 
-            tension: 0.4, 
-            borderWidth: isMobile ? 2 : 3,
-            pointBackgroundColor: '#fff',
-            pointBorderColor: '#11caa0',
-            pointBorderWidth: 2,
-            pointRadius: isMobile ? 3 : 4
-        }] 
-    },
-    options: { 
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: { 
-            y: { beginAtZero: true, border: { display: false }, grid: { color: '#f1f5f9' }, ticks: { font: {size: isMobile ? 10 : 12} } },
-            x: { border: { display: false }, grid: { display: false }, ticks: { font: {size: isMobile ? 10 : 12} } }
+        if (val === 'custom') {
+            inputKebutuhan.readOnly = false;
+            inputKebutuhan.classList.remove('bg-slate-50', 'text-slate-500');
+            inputKebutuhan.focus();
+        } else {
+            inputKebutuhan.value = val;
+            inputKebutuhan.readOnly = true;
+            inputKebutuhan.classList.add('bg-slate-50', 'text-slate-500');
+            kebutuhanAir = Number(val);
+            updateUI();
         }
-    }
-});
+        showToast("Konfigurasi diperbarui", false);
+    });
+}
 
-window.addEventListener('resize', () => {
-    const mobileNow = window.innerWidth < 768;
-    flowChart.options.scales.x.ticks.font.size = mobileNow ? 10 : 12;
-    flowChart.options.scales.y.ticks.font.size = mobileNow ? 10 : 12;
-    flowChart.data.datasets[0].borderWidth = mobileNow ? 2 : 3;
-    flowChart.data.datasets[0].pointRadius = mobileNow ? 3 : 4;
-    flowChart.update();
-});
+const inputKebutuhan = document.getElementById('inputKebutuhan');
+if (inputKebutuhan) {
+    inputKebutuhan.addEventListener('input', (e) => { 
+        if(e.target.value < 0) e.target.value = 0;
+        kebutuhanAir = Number(e.target.value); 
+        updateUI(); 
+    });
+}
+
+// ==========================================
+// 4. KONFIGURASI CHART.JS
+// ==========================================
+let flowChart;
+const canvasElem = document.getElementById('flowChart');
+
+if (canvasElem) {
+    const ctx = canvasElem.getContext('2d');
+    let gradientFill = ctx.createLinearGradient(0, 0, 0, 400);
+    gradientFill.addColorStop(0, 'rgba(17, 202, 160, 0.4)');
+    gradientFill.addColorStop(1, 'rgba(17, 202, 160, 0.0)');
+
+    const isMobile = window.innerWidth < 768;
+
+    flowChart = new Chart(ctx, {
+        type: 'line',
+        data: { 
+            labels: [], 
+            datasets: [{ 
+                label: 'Laju Debit (L/mnt)', 
+                data: [], 
+                borderColor: '#11caa0', 
+                fill: true, 
+                backgroundColor: gradientFill, 
+                tension: 0.4, 
+                borderWidth: isMobile ? 2 : 3,
+                pointBackgroundColor: '#fff',
+                pointBorderColor: '#11caa0',
+                pointBorderWidth: 2,
+                pointRadius: isMobile ? 3 : 4
+            }] 
+        },
+        options: { 
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { 
+                y: { beginAtZero: true, border: { display: false }, grid: { color: '#f1f5f9' }, ticks: { font: {size: isMobile ? 10 : 12} } },
+                x: { border: { display: false }, grid: { display: false }, ticks: { font: {size: isMobile ? 10 : 12} } }
+            }
+        }
+    });
+
+    window.addEventListener('resize', () => {
+        const mobileNow = window.innerWidth < 768;
+        if (flowChart) {
+            flowChart.options.scales.x.ticks.font.size = mobileNow ? 10 : 12;
+            flowChart.options.scales.y.ticks.font.size = mobileNow ? 10 : 12;
+            flowChart.data.datasets[0].borderWidth = mobileNow ? 2 : 3;
+            flowChart.data.datasets[0].pointRadius = mobileNow ? 3 : 4;
+            flowChart.update();
+        }
+    });
+}
 
 // ==========================================
 // 5. KALKULUS & UPDATE UI
@@ -162,6 +205,9 @@ function calculateIntegral() {
 function updateTable() {
     const tbody = document.getElementById('tableBody');
     const emptyMsg = document.getElementById('emptyTableMsg');
+    
+    if (!tbody || !emptyMsg) return;
+
     tbody.innerHTML = '';
 
     if (dataPoints.length < 2) {
@@ -197,111 +243,120 @@ function updateTable() {
 
 function updateUI() {
     const current = calculateIntegral();
-    const target = luasLahan * kebutuhanAir;
     
-    document.getElementById('cardVolume').innerText = current.toLocaleString('id-ID');
-    
+    let lahan = typeof luasLahan !== 'undefined' ? luasLahan : 0;
+    let air = typeof kebutuhanAir !== 'undefined' ? kebutuhanAir : 0;
+    let target = lahan * air;
+
+    const elVolume = document.getElementById('cardVolume');
+    if (elVolume) { elVolume.innerText = current.toLocaleString('id-ID'); }
+
+    const elTarget = document.getElementById('cardTarget');
+    if (elTarget) { elTarget.innerText = target.toLocaleString('id-ID'); }
+
     let percent = target > 0 ? (current / target) * 100 : 0;
-    
-    // VALIDASI: Kunci persentase maksimal di 100%
     let displayPercent = Math.min(percent, 100); 
-    document.getElementById('cardPercent').innerText = `${displayPercent.toFixed(1)}%`;
-    document.getElementById('progressBar').style.width = `${displayPercent}%`;
-    
-    flowChart.data.labels = dataPoints.map(d => `${d.time}m`);
-    flowChart.data.datasets[0].data = dataPoints.map(d => d.flow);
-    flowChart.update();
 
-    updateTable();
+    const elPercent = document.getElementById('cardPercent');
+    if (elPercent) { elPercent.innerText = `${displayPercent.toFixed(1)}%`; }
 
-    // ==========================================
+    const elProgress = document.getElementById('progressBar');
+    if (elProgress) { elProgress.style.width = `${displayPercent}%`; }
+
     // KUNCI FORM JIKA SUDAH MENCAPAI 100%
-    // ==========================================
     const isFull = current >= target && target > 0;
     const inputWaktuElem = document.getElementById('inputWaktu');
     const inputDebitElem = document.getElementById('inputDebit');
-    const submitBtn = document.querySelector('#formDebit button[type="submit"]');
+    const submitBtn = document.querySelector('#formDebit button'); 
 
-    if (isFull) {
-        // Matikan fungsi klik dan ketik
-        inputWaktuElem.disabled = true;
-        inputDebitElem.disabled = true;
-        submitBtn.disabled = true;
-        
-        // Berikan efek visual buram (transparan) & kursor dilarang
-        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
-        inputWaktuElem.classList.add('opacity-50', 'cursor-not-allowed');
-        inputDebitElem.classList.add('opacity-50', 'cursor-not-allowed');
-        
-        // Ubah teks tombol
-        submitBtn.innerText = "Irigasi Selesai (100%)";
-    } else {
-        // Nyalakan kembali jika di-reset atau target lahan diperbesar
-        inputWaktuElem.disabled = false;
-        inputDebitElem.disabled = false;
-        submitBtn.disabled = false;
-        
-        // Hapus efek buram
-        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-        inputWaktuElem.classList.remove('opacity-50', 'cursor-not-allowed');
-        inputDebitElem.classList.remove('opacity-50', 'cursor-not-allowed');
-        
-        // Kembalikan teks tombol
-        submitBtn.innerText = "Simpan & Kalkulasi";
-    }
-}
-
-document.getElementById('formDebit').addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const inputWaktuElem = document.getElementById('inputWaktu');
-    const inputDebitElem = document.getElementById('inputDebit');
-    
-    const time = Number(inputWaktuElem.value);
-    const flow = Number(inputDebitElem.value);
-    
-    if (time < 0 || flow < 0) {
-        showToast("Data tidak boleh bernilai minus!", true);
-        inputWaktuElem.classList.add('input-error');
-        inputDebitElem.classList.add('input-error');
-        setTimeout(() => {
-            inputWaktuElem.classList.remove('input-error');
-            inputDebitElem.classList.remove('input-error');
-        }, 1000);
-        return; 
-    }
-
-    if (dataPoints.length > 0) {
-        const waktuTerakhir = dataPoints[dataPoints.length - 1].time;
-        
-        if (time <= waktuTerakhir) {
-            showToast(`Error: Waktu harus lebih besar dari ${waktuTerakhir} menit!`, true);
-            inputWaktuElem.classList.add('input-error');
-            setTimeout(() => inputWaktuElem.classList.remove('input-error'), 1000);
-            return; 
+    if (inputWaktuElem && inputDebitElem && submitBtn) {
+        if (isFull) {
+            inputWaktuElem.disabled = true;
+            inputDebitElem.disabled = true;
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            inputWaktuElem.classList.add('opacity-50', 'cursor-not-allowed');
+            inputDebitElem.classList.add('opacity-50', 'cursor-not-allowed');
+            submitBtn.innerText = "Irigasi Selesai (100%)";
+        } else {
+            inputWaktuElem.disabled = false;
+            inputDebitElem.disabled = false;
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            inputWaktuElem.classList.remove('opacity-50', 'cursor-not-allowed');
+            inputDebitElem.classList.remove('opacity-50', 'cursor-not-allowed');
+            submitBtn.innerText = "Simpan & Kalkulasi";
         }
     }
-    
-    dataPoints.push({ time, flow });
-    dataPoints.sort((a,b) => a.time - b.time);
 
-    updateUI();
+    if (typeof flowChart !== 'undefined' && flowChart !== null) {
+        flowChart.data.labels = dataPoints.map(d => `${d.time}m`);
+        flowChart.data.datasets[0].data = dataPoints.map(d => d.flow);
+        flowChart.update();
+    }
 
-    const nextTime = time + 10;
-    inputWaktuElem.value = nextTime;
+    updateTable();
+} 
 
-    inputDebitElem.value = '';
-    inputDebitElem.focus();
-    
-    showToast(`Tercatat: ${time}m (${flow}L/m) → Next: ${nextTime}m`, false);
-});
+// ==========================================
+// 6. EVENT LISTENER FORM & RESET
+// ==========================================
+const formDebit = document.getElementById('formDebit');
+if (formDebit) {
+    formDebit.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const inputWaktuElem = document.getElementById('inputWaktu');
+        const inputDebitElem = document.getElementById('inputDebit');
+        
+        const time = Number(inputWaktuElem.value);
+        const flow = Number(inputDebitElem.value);
+        
+        if (time < 0 || flow < 0) {
+            showToast("Data tidak boleh bernilai minus!", true);
+            inputWaktuElem.classList.add('input-error');
+            inputDebitElem.classList.add('input-error');
+            setTimeout(() => {
+                inputWaktuElem.classList.remove('input-error');
+                inputDebitElem.classList.remove('input-error');
+            }, 1000);
+            return; 
+        }
+
+        if (dataPoints.length > 0) {
+            const waktuTerakhir = dataPoints[dataPoints.length - 1].time;
+            
+            if (time <= waktuTerakhir) {
+                showToast(`Error: Waktu harus lebih besar dari ${waktuTerakhir} menit!`, true);
+                inputWaktuElem.classList.add('input-error');
+                setTimeout(() => inputWaktuElem.classList.remove('input-error'), 1000);
+                return; 
+            }
+        }
+        
+        dataPoints.push({ time, flow });
+        dataPoints.sort((a,b) => a.time - b.time);
+
+        updateUI();
+
+        const nextTime = time + 10;
+        inputWaktuElem.value = nextTime;
+
+        inputDebitElem.value = '';
+        inputDebitElem.focus();
+        
+        showToast(`Tercatat: ${time}m (${flow}L/m) → Next: ${nextTime}m`, false);
+    });
+}
 
 function resetData() {
     if(dataPoints.length > 0 && confirm("Reset semua data simulasi?")) {
         dataPoints = [];
         updateUI();
-        document.getElementById('inputWaktu').value = 0;
-        document.getElementById('inputDebit').value = '';
+        const inputWaktuElem = document.getElementById('inputWaktu');
+        const inputDebitElem = document.getElementById('inputDebit');
+        if (inputWaktuElem) inputWaktuElem.value = 0;
+        if (inputDebitElem) inputDebitElem.value = '';
         showToast("Sistem direset", false);
     }
 }
@@ -326,6 +381,9 @@ function downloadExcel() {
     showToast("Tabel Laporan Diunduh", false);
 }
 
-// Inisialisasi awal
-document.getElementById('inputWaktu').value = 0;
-updateUI();
+// Inisialisasi awal agar UI tidak kosong saat dibuka
+document.addEventListener("DOMContentLoaded", () => {
+    const inputWaktuElem = document.getElementById('inputWaktu');
+    if (inputWaktuElem) inputWaktuElem.value = 0;
+    updateUI();
+});

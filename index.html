@@ -462,7 +462,21 @@
                                             <span class="text-[10px] md:text-xs font-bold text-emerald-600 uppercase tracking-widest">Terakumulasi</span>
                                             <i class="fa-solid fa-water text-[#0ea5e9]/70"></i>
                                         </div>
-                                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-emerald-950 font-mono tracking-tight break-words"><span id="cardVolume">0</span> <span class="text-lg md:text-2xl text-emerald-400 font-sans">L</span></h2>
+                                        <!-- KODE BARU: Bagian Angka Volume dan Target -->
+                                        <h2 class="flex flex-wrap items-baseline gap-x-2 md:gap-x-3 text-[#022c22] font-mono tracking-tight">
+    
+                                            <!-- Bagian Kiri: Volume Utama (Anti-pecah) -->
+                                            <span class="whitespace-nowrap">
+                                                <span id="cardVolume" class="text-3xl md:text-4xl lg:text-5xl font-black">0</span>
+                                                <span class="text-lg md:text-2xl text-[#11caa0] font-sans ml-1">L</span>
+                                            </span>
+    
+                                            <!-- Bagian Kanan: Target (Anti-pecah) -->
+                                            <span class="whitespace-nowrap text-xl md:text-3xl text-emerald-600/50 font-mono tracking-normal">
+                                                / <span id="cardTarget">0</span> 
+                                                <span class="font-sans text-base md:text-xl ml-1">L</span>
+                                             </span>
+                                        </h2>
                                     </div>
                                 </div>
                                 <div class="relative bg-white/90 backdrop-blur-md p-6 md:p-7 rounded-[24px] shadow-[0_8px_30px_rgb(16,185,129,0.04)] border border-emerald-100 overflow-hidden group hover:shadow-[0_8px_30px_rgb(16,185,129,0.08)] transition-all">
