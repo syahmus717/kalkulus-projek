@@ -1,3 +1,8 @@
+// =========================================================
+// KONFIGURASI GLOBAL APLIKASI
+// Bagian ini menyimpan key localStorage, cache teks asli, dan
+// daftar atribut HTML yang perlu ikut diterjemahkan saat ganti bahasa.
+// =========================================================
 const PREF_THEME_KEY = "smartIrrigationTheme";
 const PREF_LANGUAGE_KEY = "smartIrrigationLanguage";
 const ORIGINAL_TEXT_NODES = new WeakMap();
@@ -9,6 +14,8 @@ const TRANSLATABLE_ATTRIBUTES = [
   "data-label",
   "data-tooltip",
 ];
+
+// Label dropdown tanaman untuk mode Bahasa Indonesia dan English.
 const CROP_OPTION_LABELS = {
   id: [
     "🌾 Padi",
@@ -37,6 +44,9 @@ const CROP_OPTION_LABELS = {
     "🍃 Custom",
   ],
 };
+
+// Detail tiap tanaman: ikon, warna aksen, nama, dan keterangan singkat
+// yang ditampilkan pada kartu preview tanaman di halaman perhitungan.
 const CROP_DETAILS = [
   {
     icon: "🌾",
@@ -138,6 +148,8 @@ const CROP_DETAILS = [
     },
   },
 ];
+
+// Label navigasi dipisah supaya menu desktop dan mobile mudah diganti bahasa.
 const NAV_LABELS = {
   id: {
     beranda: "BERANDA",
@@ -156,9 +168,12 @@ const NAV_LABELS = {
     mobileTentang: "About Us",
   },
 };
+
+// State preferensi pengguna yang diambil dari localStorage browser.
 let currentLanguage = localStorage.getItem(PREF_LANGUAGE_KEY) || "id";
 let isDarkMode = localStorage.getItem(PREF_THEME_KEY) === "dark";
 
+// Kamus terjemahan dari teks Indonesia ke English untuk seluruh UI.
 const TRANSLATIONS = {
   en: {
     "SmartIrrigation | Kelompok 3 Kalkulus":
@@ -416,11 +431,13 @@ const TRANSLATIONS = {
   },
 };
 
+// Mengambil terjemahan satu kalimat/label tanpa mengubah teks aslinya.
 function translateLiteral(value) {
   if (currentLanguage === "id") return value;
   return TRANSLATIONS[currentLanguage]?.[value] || value;
 }
 
+// Menerjemahkan teks sambil menjaga spasi di awal/akhir node HTML.
 function translateTextPreserveWhitespace(value) {
   const leading = value.match(/^\s*/)?.[0] || "";
   const trailing = value.match(/\s*$/)?.[0] || "";
@@ -429,6 +446,7 @@ function translateTextPreserveWhitespace(value) {
   return `${leading}${translateLiteral(trimmed)}${trailing}`;
 }
 
+// Menyimpan atribut asli agar saat kembali ke Bahasa Indonesia tidak rusak.
 function rememberAttribute(element, attributeName) {
   if (!ORIGINAL_ATTRIBUTES.has(element)) ORIGINAL_ATTRIBUTES.set(element, {});
   const attrs = ORIGINAL_ATTRIBUTES.get(element);
@@ -437,6 +455,7 @@ function rememberAttribute(element, attributeName) {
   return attrs[attributeName];
 }
 
+// Mengubah isi dropdown tanaman sesuai bahasa aktif.
 function localizeCropOptions(language = currentLanguage) {
   const select = document.getElementById("selectTanaman");
   const labels = CROP_OPTION_LABELS[language] || CROP_OPTION_LABELS.id;
@@ -448,6 +467,7 @@ function localizeCropOptions(language = currentLanguage) {
   });
 }
 
+// Memperbarui kartu preview tanaman berdasarkan pilihan dropdown.
 function updateCropPreview() {
   const select = document.getElementById("selectTanaman");
   const preview = document.getElementById("cropPreview");
@@ -483,6 +503,7 @@ function updateCropPreview() {
   });
 }
 
+// Merapikan angka kebutuhan air agar tidak menampilkan nol desimal berlebihan.
 function formatRequirementValue(value) {
   const normalized = Math.max(0, Number(value) || 0);
   return Number.isInteger(normalized)
@@ -490,6 +511,7 @@ function formatRequirementValue(value) {
     : normalized.toFixed(1).replace(/\.0$/, "");
 }
 
+// Mengubah nilai kebutuhan air lalu langsung memperbarui preview dan ringkasan.
 function setRequirementValue(value) {
   const inputKebutuhan = document.getElementById("inputKebutuhan");
   if (!inputKebutuhan) return;
@@ -500,6 +522,7 @@ function setRequirementValue(value) {
   updateUI();
 }
 
+// Tombol plus/minus kebutuhan air hanya aktif untuk opsi tanaman kustom.
 function adjustRequirementValue(delta) {
   const select = document.getElementById("selectTanaman");
   const inputKebutuhan = document.getElementById("inputKebutuhan");
@@ -510,6 +533,7 @@ function adjustRequirementValue(delta) {
   inputKebutuhan.focus();
 }
 
+// Format angka umum untuk stepper luas, waktu, dan debit.
 function formatSteppedValue(value) {
   const normalized = Math.max(0, Number(value) || 0);
   return Number.isInteger(normalized)
@@ -517,11 +541,13 @@ function formatSteppedValue(value) {
     : normalized.toFixed(2).replace(/\.?0+$/, "");
 }
 
+// Mengambil nilai step dari input number; fallback ke 1 jika tidak valid.
 function getInputStep(input) {
   const step = Number(input?.step);
   return Number.isFinite(step) && step > 0 ? step : 1;
 }
 
+// Mengubah luas lahan dan menghitung ulang target volume air.
 function setAreaValue(value) {
   const inputLuas = document.getElementById("inputLuas");
   if (!inputLuas) return;
@@ -531,6 +557,7 @@ function setAreaValue(value) {
   updateUI();
 }
 
+// Tombol plus/minus untuk luas lahan.
 function adjustAreaValue(direction) {
   const inputLuas = document.getElementById("inputLuas");
   if (!inputLuas) return;
@@ -540,6 +567,7 @@ function adjustAreaValue(direction) {
   inputLuas.focus();
 }
 
+// Tombol plus/minus untuk input sensor waktu atau debit.
 function adjustSensorValue(inputId, direction) {
   const input = document.getElementById(inputId);
   if (!input || input.disabled) return;
@@ -551,6 +579,7 @@ function adjustSensorValue(inputId, direction) {
   input.focus();
 }
 
+// Mengganti teks tombol mobile tanpa menghapus ikon Font Awesome di depannya.
 function setButtonTextAfterIcon(button, label) {
   if (!button) return;
   const textNode = Array.from(button.childNodes).find(
@@ -564,6 +593,7 @@ function setButtonTextAfterIcon(button, label) {
   }
 }
 
+// Mengatur label menu navigasi desktop dan mobile berdasarkan bahasa aktif.
 function localizeNavigationLabels(language = currentLanguage) {
   const labels = NAV_LABELS[language] || NAV_LABELS.id;
 
@@ -583,6 +613,7 @@ function localizeNavigationLabels(language = currentLanguage) {
   setButtonTextAfterIcon(document.getElementById("nav-mobile-tentang"), labels.mobileTentang);
 }
 
+// Fungsi utama bahasa: menerjemahkan teks, atribut, dropdown, navigasi, dan chart.
 function applyLanguage(language = currentLanguage) {
   currentLanguage = language;
   localStorage.setItem(PREF_LANGUAGE_KEY, currentLanguage);
@@ -639,23 +670,27 @@ function applyLanguage(language = currentLanguage) {
   if (typeof renderSupportReports === "function") renderSupportReports();
 }
 
+// Dipanggil oleh tombol bahasa ID/EN.
 function setLanguage(language) {
   applyLanguage(language);
   updateUI();
 }
 
+// Menandai tombol bahasa yang sedang aktif.
 function syncLanguageControls() {
   document.querySelectorAll(".language-btn").forEach((button) => {
     button.classList.toggle("active", button.id.endsWith(currentLanguage));
   });
 }
 
+// Menentukan label tombol tema sesuai kondisi gelap/terang.
 function getThemeControlLabel() {
   if (isDarkMode)
     return currentLanguage === "en" ? "Light Mode" : "Mode Terang";
   return currentLanguage === "en" ? "Dark Mode" : "Mode Gelap";
 }
 
+// Menyinkronkan ikon dan label tombol tema di desktop dan mobile.
 function syncThemeControls() {
   const label = getThemeControlLabel();
   const buttons = [
@@ -680,6 +715,7 @@ function syncThemeControls() {
   if (mobileLabel) mobileLabel.textContent = label;
 }
 
+// Menerapkan class dark-mode ke body dan menyimpan preferensi tema.
 function applyTheme() {
   document.body.classList.toggle("dark-mode", isDarkMode);
   localStorage.setItem(PREF_THEME_KEY, isDarkMode ? "dark" : "light");
@@ -687,11 +723,13 @@ function applyTheme() {
   updateChartPreferences();
 }
 
+// Dipanggil saat pengguna menekan tombol mode gelap/terang.
 function toggleDarkMode() {
   isDarkMode = !isDarkMode;
   applyTheme();
 }
 
+// Menyesuaikan warna dan label chart agar cocok dengan tema dan bahasa aktif.
 function updateChartPreferences() {
   if (typeof flowChart === "undefined" || !flowChart) return;
   const dark = document.body.classList.contains("dark-mode");
@@ -704,6 +742,7 @@ function updateChartPreferences() {
   flowChart.update();
 }
 
+// Menerjemahkan pesan toast, termasuk pesan dinamis yang punya angka/jenis laporan.
 function localizedMessage(message) {
   if (currentLanguage === "id") return message;
   const exact = translateLiteral(message);
@@ -726,6 +765,7 @@ function localizedMessage(message) {
 
 // ==========================================
 // 1. LOGIKA HAMBURGER MENU MOBILE
+// Mengatur buka/tutup menu mobile dan menutup menu setelah link diklik.
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
   const mobileMenuBtn = document.getElementById("mobile-menu-btn");
@@ -771,6 +811,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ==========================================
 // 2. SPA NAVIGATION & TOAST
+// Fitur perpindahan halaman tanpa reload dan notifikasi kecil di bawah layar.
 // ==========================================
 function showToast(message, isError = false) {
   const toast = document.getElementById("toast");
@@ -794,6 +835,7 @@ function showToast(message, isError = false) {
   }, 3000);
 }
 
+// Menampilkan satu halaman aktif: beranda, perhitungan, atau tentang.
 function showPage(pageId) {
   document.querySelectorAll(".page-wrapper").forEach((page) => {
     page.classList.remove("active-page");
@@ -827,6 +869,7 @@ function showPage(pageId) {
 
 // ==========================================
 // 3. LOGIKA DATA & DROPDOWN
+// Menyimpan data sensor, luas lahan, kebutuhan air, dan input konfigurasi tanaman.
 // ==========================================
 let dataPoints = [];
 let luasLahan = 1000;
@@ -834,6 +877,7 @@ let kebutuhanAir = 10;
 
 const inputLuas = document.getElementById("inputLuas");
 if (inputLuas) {
+  // Saat luas lahan berubah, target volume dihitung ulang.
   inputLuas.addEventListener("input", (e) => {
     if (e.target.value < 0) e.target.value = 0;
     luasLahan = Number(e.target.value);
@@ -841,6 +885,7 @@ if (inputLuas) {
   });
 }
 
+// Tombol stepper untuk menaikkan/menurunkan luas, waktu, dan debit.
 document.getElementById("decreaseLuas")?.addEventListener("click", () => adjustAreaValue(-1));
 document.getElementById("increaseLuas")?.addEventListener("click", () => adjustAreaValue(1));
 document.getElementById("decreaseWaktu")?.addEventListener("click", () => adjustSensorValue("inputWaktu", -1));
@@ -850,6 +895,7 @@ document.getElementById("increaseDebit")?.addEventListener("click", () => adjust
 
 const selectTanaman = document.getElementById("selectTanaman");
 if (selectTanaman) {
+  // Dropdown tanaman otomatis mengisi kebutuhan air, kecuali mode kustom.
   selectTanaman.addEventListener("change", (e) => {
     const val = e.target.value;
     const inputKebutuhan = document.getElementById("inputKebutuhan");
@@ -873,6 +919,7 @@ if (selectTanaman) {
 
 const inputKebutuhanElem = document.getElementById("inputKebutuhan");
 if (inputKebutuhanElem) {
+  // Input kebutuhan air manual dipakai ketika pengguna memilih tanaman kustom.
   inputKebutuhanElem.addEventListener("input", (e) => {
     if (e.target.value < 0) e.target.value = 0;
     kebutuhanAir = Number(e.target.value);
@@ -887,18 +934,21 @@ document.getElementById("increaseKebutuhan")?.addEventListener("click", () => ad
 
 // ==========================================
 // 4. KONFIGURASI CHART.JS
+// Membuat grafik garis untuk menampilkan perubahan laju debit dari waktu ke waktu.
 // ==========================================
 let flowChart;
 const canvasElem = document.getElementById("flowChart");
 
 if (canvasElem) {
   const ctx = canvasElem.getContext("2d");
+  // Gradient memberi efek area lembut di bawah garis chart.
   let gradientFill = ctx.createLinearGradient(0, 0, 0, 400);
   gradientFill.addColorStop(0, "rgba(17, 202, 160, 0.4)");
   gradientFill.addColorStop(1, "rgba(17, 202, 160, 0.0)");
 
   const isMobile = window.innerWidth < 768;
 
+  // Instance Chart.js utama untuk visualisasi data sensor.
   flowChart = new Chart(ctx, {
     type: "line",
     data: {
@@ -939,6 +989,7 @@ if (canvasElem) {
     },
   });
 
+  // Saat ukuran layar berubah, chart menyesuaikan ketebalan garis dan titik.
   window.addEventListener("resize", () => {
     const mobileNow = window.innerWidth < 768;
     if (flowChart) {
@@ -953,8 +1004,10 @@ if (canvasElem) {
 
 // ==========================================
 // 5. KALKULUS & UPDATE UI
+// Menghitung integral numerik metode trapesium dan menampilkan hasilnya ke UI.
 // ==========================================
 function calculateIntegral() {
+  // Minimal butuh 2 titik karena satu trapesium dibentuk oleh dua data sensor.
   if (dataPoints.length < 2) return 0;
   let total = 0;
   for (let i = 0; i < dataPoints.length - 1; i++) {
@@ -965,6 +1018,7 @@ function calculateIntegral() {
   return total;
 }
 
+// Merender tabel validasi: delta waktu, debit rata-rata, dan volume tiap segmen.
 function updateTable() {
   const tbody = document.getElementById("tableBody");
   const emptyMsg = document.getElementById("emptyTableMsg");
@@ -981,6 +1035,7 @@ function updateTable() {
   let rowsHTML = "";
 
   for (let i = 0; i < dataPoints.length - 1; i++) {
+    // Rumus trapesium: luas = delta waktu * rata-rata debit.
     let t1 = dataPoints[i].time;
     let t2 = dataPoints[i + 1].time;
     let dt = t2 - t1;
@@ -1003,6 +1058,7 @@ function updateTable() {
   tbody.innerHTML = rowsHTML;
 }
 
+// Sinkronisasi seluruh tampilan setelah data berubah: kartu angka, progress, form, chart, tabel.
 function updateUI() {
   const current = typeof calculateIntegral === 'function' ? calculateIntegral() : 0;
   let lahan = typeof luasLahan !== 'undefined' ? luasLahan : 0;
@@ -1034,6 +1090,7 @@ function updateUI() {
 
   // ==========================================
   // KUNCI FORM JIKA SUDAH MENCAPAI 100%
+  // Mencegah input sensor baru ketika volume air sudah memenuhi target lahan.
   // ==========================================
   const isFull = current >= target && target > 0;
   const inputWaktuElem = document.getElementById("inputWaktu");
@@ -1078,9 +1135,11 @@ function updateUI() {
 
 // ==========================================
 // 6. EVENT LISTENER FORM & RESET
+// Mengelola submit data sensor, validasi input, reset simulasi, dan export CSV.
 // ==========================================
 const formDebit = document.getElementById("formDebit");
 if (formDebit) {
+  // Submit form menambahkan titik data baru ke array dataPoints.
   formDebit.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -1091,6 +1150,7 @@ if (formDebit) {
     const flow = Number(inputDebitElem.value);
 
     if (time < 0 || flow < 0) {
+      // Nilai negatif tidak masuk akal untuk waktu dan debit air.
       showToast("Data tidak boleh bernilai minus!", true);
       inputWaktuElem.classList.add("input-error");
       inputDebitElem.classList.add("input-error");
@@ -1105,6 +1165,7 @@ if (formDebit) {
       const waktuTerakhir = dataPoints[dataPoints.length - 1].time;
 
       if (time <= waktuTerakhir) {
+        // Waktu harus terus maju agar segmen trapesium tidak terbalik.
         showToast(
           `Error: Waktu harus lebih besar dari ${waktuTerakhir} menit!`,
           true,
@@ -1116,6 +1177,7 @@ if (formDebit) {
     }
 
     dataPoints.push({ time, flow });
+    // Data tetap diurutkan berdasarkan waktu sebelum dihitung ulang.
     dataPoints.sort((a, b) => a.time - b.time);
 
     updateUI();
@@ -1130,6 +1192,7 @@ if (formDebit) {
   });
 }
 
+// Menghapus semua data sensor dan mengembalikan form ke kondisi awal.
 function resetData() {
   if (dataPoints.length > 0 && confirm(translateLiteral("Reset semua data simulasi?"))) {
     dataPoints = [];
@@ -1142,6 +1205,7 @@ function resetData() {
   }
 }
 
+// Mengunduh laporan kalkulasi ke file CSV yang bisa dibuka di Excel/Spreadsheet.
 function downloadExcel() {
   if (dataPoints.length < 2)
     return showToast("Butuh min. 2 data untuk validasi!", true);
@@ -1175,7 +1239,11 @@ function downloadExcel() {
   showToast("Tabel Laporan Diunduh", false);
 }
 
-// CONTACT SUPPORT & MODE DEVELOPER
+// ==========================================
+// 7. CONTACT SUPPORT & MODE DEVELOPER
+// Fitur laporan kendala: validasi form, kirim ke Formspree, simpan salinan
+// ke localStorage, serta panel developer untuk melihat/ekspor laporan lokal.
+// ==========================================
 const SUPPORT_EMAIL = "support.smartirrigation@gmail.com";
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xgodebnq";
 const SUPPORT_STORAGE_KEY = "smartIrrigationSupportReports";
@@ -1185,6 +1253,7 @@ const SUPPORT_COOLDOWN_MS = 60000;
 const SUPPORT_MIN_READY_MS = 2500;
 const SUPPORT_FORM_READY_AT = Date.now();
 
+// Mengisi select jenis laporan saat pengguna menekan kartu Bug/Glitch/Error/Saran.
 function selectSupportType(type) {
   const reportType = document.getElementById("reportType");
   if (reportType) {
@@ -1194,6 +1263,7 @@ function selectSupportType(type) {
   }
 }
 
+// Membaca salinan laporan support dari localStorage.
 function getSupportReports() {
   try {
     return JSON.parse(localStorage.getItem(SUPPORT_STORAGE_KEY)) || [];
@@ -1202,10 +1272,12 @@ function getSupportReports() {
   }
 }
 
+// Menyimpan salinan laporan support ke localStorage.
 function saveSupportReports(reports) {
   localStorage.setItem(SUPPORT_STORAGE_KEY, JSON.stringify(reports));
 }
 
+// Membersihkan teks sebelum dimasukkan ke innerHTML agar aman dari HTML injection.
 function escapeHTML(value) {
   return String(value)
     .replace(/&/g, "&amp;")
@@ -1215,6 +1287,7 @@ function escapeHTML(value) {
     .replace(/'/g, "&#039;");
 }
 
+// Mengambil seluruh nilai input pada form laporan support.
 function getSupportFormData() {
   const name = document.getElementById("reportName").value.trim();
   const contact = document.getElementById("reportContact").value.trim();
@@ -1235,10 +1308,12 @@ function getSupportFormData() {
   };
 }
 
+// Validasi ringan untuk memastikan data laporan siap disimpan lokal.
 function validateSupportReport(report) {
   return !getSupportValidationMessage(report, false);
 }
 
+// Validasi lengkap: field wajib, format email, anti-spam, cooldown, dan duplikasi.
 function getSupportValidationMessage(report, checkAntiSpam = true) {
   const message = report.message.replace(/\s+/g, " ").trim();
   const looksLikeEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(report.contact);
@@ -1282,6 +1357,7 @@ function getSupportValidationMessage(report, checkAntiSpam = true) {
   return "";
 }
 
+// Membuat sidik jari laporan untuk mendeteksi laporan yang sama berulang.
 function getSupportReportSignature(report) {
   return [report.type, report.page, report.message]
     .join("|")
@@ -1290,11 +1366,13 @@ function getSupportReportSignature(report) {
     .trim();
 }
 
+// Mencatat waktu dan signature laporan terakhir yang berhasil dikirim.
 function markSupportReportSent(report) {
   localStorage.setItem(SUPPORT_LAST_SENT_KEY, String(Date.now()));
   localStorage.setItem(SUPPORT_LAST_SIGNATURE_KEY, getSupportReportSignature(report));
 }
 
+// Memastikan endpoint Formspree sudah berbentuk URL yang valid.
 function isFormspreeConfigured() {
   return (
     FORMSPREE_ENDPOINT.startsWith("https://formspree.io/f/") &&
@@ -1302,6 +1380,7 @@ function isFormspreeConfigured() {
   );
 }
 
+// Mengubah objek laporan menjadi FormData untuk dikirim ke Formspree.
 function buildSupportFormData(report) {
   const formData = new FormData();
   formData.append("nama_pelapor", report.name);
@@ -1315,6 +1394,7 @@ function buildSupportFormData(report) {
   return formData;
 }
 
+// Mengirim laporan ke layanan Formspree menggunakan fetch.
 async function sendSupportReportToFormspree(report) {
   if (!isFormspreeConfigured()) {
     throw new Error("Endpoint Formspree belum diatur. Ganti FORMSPREE_ENDPOINT di script.js.");
@@ -1331,6 +1411,7 @@ async function sendSupportReportToFormspree(report) {
   }
 }
 
+// Membuat pesan validasi bawaan browser menjadi lebih ramah dan sesuai bahasa.
 function getSupportFieldMessage(field) {
   const label = field.dataset.label || "Kolom ini";
   const validity = field.validity;
@@ -1353,11 +1434,13 @@ function getSupportFieldMessage(field) {
   return "";
 }
 
+// Memasang custom validity pada field form support.
 function updateSupportFieldValidity(field) {
   field.setCustomValidity("");
   field.setCustomValidity(getSupportFieldMessage(field));
 }
 
+// Menyiapkan pesan validasi realtime untuk semua field yang punya data-label.
 function setupSupportValidationMessages() {
   const fields = supportForm.querySelectorAll("[data-label]");
 
@@ -1373,6 +1456,7 @@ function setupSupportValidationMessages() {
   });
 }
 
+// Menampilkan daftar laporan lokal di panel developer.
 function renderSupportReports() {
   const reportList = document.getElementById("supportReportList");
   const emptyState = document.getElementById("supportReportEmpty");
@@ -1413,6 +1497,7 @@ function renderSupportReports() {
     .join("");
 }
 
+// Menyimpan salinan laporan ke localStorage setelah lolos validasi.
 function saveSupportReport(report = getSupportFormData(), showMessage = true) {
   if (!validateSupportReport(report)) {
     showToast("Lengkapi semua field laporan dulu.", true);
@@ -1430,6 +1515,7 @@ function saveSupportReport(report = getSupportFormData(), showMessage = true) {
   return reportToSave;
 }
 
+// Alur submit support: validasi, loading button, kirim email, simpan salinan.
 async function submitSupportReport(event) {
   event.preventDefault();
 
@@ -1463,6 +1549,7 @@ async function submitSupportReport(event) {
   }
 }
 
+// Export laporan support lokal ke file JSON.
 function exportSupportReports() {
   const reports = getSupportReports();
   if (reports.length === 0) {
@@ -1482,6 +1569,7 @@ function exportSupportReports() {
   showToast("Laporan support diekspor.", false);
 }
 
+// Menghapus seluruh laporan support yang tersimpan di browser.
 function clearSupportReports() {
   if (!confirm(translateLiteral("Hapus semua laporan support yang tersimpan di browser ini?")))
     return;
@@ -1490,6 +1578,7 @@ function clearSupportReports() {
   showToast("Tampungan laporan dikosongkan.", false);
 }
 
+// Mode developer aktif jika URL memakai ?developer=true atau #developer.
 function isSupportDeveloperMode() {
   const params = new URLSearchParams(window.location.search);
   return (
@@ -1497,6 +1586,7 @@ function isSupportDeveloperMode() {
   );
 }
 
+// Menampilkan panel tampungan laporan hanya untuk mode developer.
 function setupSupportDeveloperPanel() {
   const panel = document.getElementById("developerSupportPanel");
   const supportGrid = document.getElementById("supportSectionGrid");
@@ -1508,6 +1598,7 @@ function setupSupportDeveloperPanel() {
 
 const supportForm = document.getElementById("supportForm");
 if (supportForm) {
+  // Inisialisasi form support saat elemen tersedia di halaman.
   supportForm.action = FORMSPREE_ENDPOINT;
   supportForm.method = "POST";
 
@@ -1526,6 +1617,7 @@ if (supportForm) {
 
 // ==========================================
 // INISIALISASI AWAL
+// Menyiapkan nilai default, preferensi tema, bahasa, dan tampilan pertama aplikasi.
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     const inputWaktuElem = document.getElementById("inputWaktu");
